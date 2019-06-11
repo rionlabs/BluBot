@@ -11,4 +11,8 @@
     <string name="github_issues_url" translatable="false">https://github.com/rionlabs/BluBot/issues</string>
     <string name="developer_email" translatable="false">mail@rionlabs.com</string>
     <string name="email_subject">Bug in BluBot</string>
+
+    <string name="bluetooth_disabled">Bluetooth Disabled</string>
+    <string name="bt_disabled_description">Bluetooth is disabled. Click button to turn it on.</string>
+    <string name="turn_bluetooth_on">Turn Bluetooth On</string>
 </resources>

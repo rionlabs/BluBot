@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/connection_navigation"
+    app:startDestination="@id/BLDiscoveryFragment">
+
+    <fragment
+        android:id="@+id/BLDisabledFragment"
+        android:name="org.rionlabs.blubot.ui.BLDisabledFragment"
+        android:label="fragment_bl_disabled"
+        tools:layout="@layout/fragment_bl_disabled" />
+
+    <fragment
+        android:id="@+id/BLDiscoveryFragment"
+        android:name="org.rionlabs.blubot.ui.BLDiscoveryFragment"
+        android:label="fragment_bl_discovery"
+        tools:layout="@layout/fragment_bl_discovery">
+
+        <action
+            android:id="@+id/enableBluetooth"
+            app:destination="@id/BLDisabledFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
+
+        <action
+            android:id="@+id/startControl"
+            app:destination="@id/BLControlFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/BLControlFragment"
+        android:name="org.rionlabs.blubot.ui.BLControlFragment"
+        android:label="fragment_bl_control"
+        tools:layout="@layout/fragment_bl_control" />
+
+</navigation>
