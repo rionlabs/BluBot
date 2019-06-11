@@ -15,4 +15,6 @@
     <string name="bluetooth_disabled">Bluetooth Disabled</string>
     <string name="bt_disabled_description">Bluetooth is disabled. Click button to turn it on.</string>
     <string name="turn_bluetooth_on">Turn Bluetooth On</string>
+
+    <string name="cd_bluetooth_device">Bluetooth Device</string>
 </resources>
