@@ -12,4 +12,5 @@
     <color name="divider">#B6B6B6</color>
 
     <color name="ic_launcher_background">@color/primaryColor</color>
+    <color name="launch_background">@android:color/white</color>
 </resources>
