@@ -2,6 +2,7 @@ package org.rionlabs.blubot.ui
 
 import android.bluetooth.BluetoothDevice
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -31,7 +32,12 @@ class DiscoveredDeviceAdapter(private val interactionListener: InteractionListen
     class DeviceViewHolder(private val binding: ItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(device: DiscoveredDevice) {
-            binding.device = device
+            if (device.name.isEmpty()) {
+                binding.device = device.copy(name = device.ssid)
+                binding.deviceSsidText.visibility = GONE
+            } else {
+                binding.device = device
+            }
             binding.executePendingBindings()
         }
 

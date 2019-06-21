@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
+import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 import org.rionlabs.blubot.util.dataItem
 import timber.log.Timber
 
@@ -87,6 +88,7 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBlDiscoveryBinding.inflate(inflater, container, false).apply {
+            deviceList.addItemDecoration(DeviceItemDecoration(requireContext()))
             deviceList.layoutManager = LinearLayoutManager(requireContext())
             deviceList.adapter = deviceAdapter
         }

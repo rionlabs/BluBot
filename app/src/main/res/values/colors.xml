@@ -14,7 +14,7 @@
     <color name="iconsLight">#FFFFFF</color>
     <color name="iconsDark">#FFA5A5A5</color>
 
-    <color name="divider">#B6B6B6</color>
+    <color name="divider">#B6B6B6B6</color>
 
     <!-- Individual Colors -->
     <color name="ic_launcher_background">@color/primaryColor</color>
