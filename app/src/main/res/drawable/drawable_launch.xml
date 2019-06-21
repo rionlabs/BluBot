@@ -7,9 +7,17 @@
 
     <item
         android:gravity="center"
-        android:top="-80dp">
+        android:top="-72dp">
         <bitmap
             android:mipMap="true"
-            android:src="@drawable/img_launch" />
+            android:src="@drawable/img_launch_blubot" />
+    </item>
+
+    <item
+        android:bottom="48dp"
+        android:gravity="bottom|center_horizontal">
+        <bitmap
+            android:mipMap="true"
+            android:src="@drawable/img_launch_rionlabs" />
     </item>
 </layer-list>
