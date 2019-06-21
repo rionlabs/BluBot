@@ -41,6 +41,12 @@
         android:id="@+id/BLControlFragment"
         android:name="org.rionlabs.blubot.ui.BLControlFragment"
         android:label="fragment_bl_control"
-        tools:layout="@layout/fragment_bl_control" />
+        tools:layout="@layout/fragment_bl_control">
+
+        <argument
+            android:name="connectedDevice"
+            app:argType="android.bluetooth.BluetoothDevice" />
+
+    </fragment>
 
 </navigation>

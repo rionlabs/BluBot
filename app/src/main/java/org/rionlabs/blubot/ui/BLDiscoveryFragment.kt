@@ -69,8 +69,10 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
 
             if (selectedDevice != null && device.address == selectedDevice?.address) {
                 when (bondState) {
-                    BluetoothDevice.BOND_BONDED ->
-                        findNavController().navigate(R.id.startControl)
+                    BluetoothDevice.BOND_BONDED -> {
+                        val startControl = BLDiscoveryFragmentDirections.startControl(device)
+                        findNavController().navigate(startControl)
+                    }
                 }
             }
         }
@@ -132,7 +134,8 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
         if (device.bondState == BluetoothDevice.BOND_NONE) {
             device.createBond()
         } else if (device.bondState == BluetoothDevice.BOND_BONDED) {
-            findNavController().navigate(R.id.startControl)
+            val startControl = BLDiscoveryFragmentDirections.startControl(device)
+            findNavController().navigate(startControl)
         }
     }
 
