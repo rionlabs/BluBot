@@ -4,5 +4,5 @@ import android.bluetooth.BluetoothDevice
 import org.rionlabs.blubot.DiscoveredDevice
 
 fun BluetoothDevice.dataItem(): DiscoveredDevice {
-    return DiscoveredDevice(name.orEmpty(), address.orEmpty())
+    return DiscoveredDevice(name.orEmpty(), address.orEmpty(), this)
 }

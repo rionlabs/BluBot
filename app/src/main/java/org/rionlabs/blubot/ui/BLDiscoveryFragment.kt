@@ -10,17 +10,20 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.util.dataItem
 import timber.log.Timber
 
-class BLDiscoveryFragment : Fragment() {
+class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListener {
 
     private lateinit var binding: FragmentBlDiscoveryBinding
 
-    private val deviceAdapter = DiscoveredDeviceAdapter()
+    private val deviceAdapter = DiscoveredDeviceAdapter(this)
+
+    private var selectedDevice: BluetoothDevice? = null
 
     private var inDiscovery: Boolean = false
 
@@ -53,6 +56,21 @@ class BLDiscoveryFragment : Fragment() {
                 }
                 else -> {
                     Timber.w("Action : $action is not bluetooth related.")
+                }
+            }
+        }
+    }
+
+    private val bondStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+            val bondState =
+                intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+
+            if (selectedDevice != null && device.address == selectedDevice?.address) {
+                when (bondState) {
+                    BluetoothDevice.BOND_BONDED ->
+                        findNavController().navigate(R.id.startControl)
                 }
             }
         }
@@ -99,6 +117,23 @@ class BLDiscoveryFragment : Fragment() {
             Toast.makeText(activity, "Bluetooth discovery failed.", Toast.LENGTH_LONG).show()
         else
             Toast.makeText(activity, "Discovery started", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDeviceSelected(device: BluetoothDevice) {
+        // Save the device in app context
+        selectedDevice = device
+
+        val filter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        requireContext().registerReceiver(bondStateReceiver, filter)
+
+        // Cancel discovery to make connection faster
+        BluetoothAdapter.getDefaultAdapter().cancelDiscovery()
+
+        if (device.bondState == BluetoothDevice.BOND_NONE) {
+            device.createBond()
+        } else if (device.bondState == BluetoothDevice.BOND_BONDED) {
+            findNavController().navigate(R.id.startControl)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
