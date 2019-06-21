@@ -1,9 +1,18 @@
 <resources>
+    <!-- Base Dimensions -->
+    <dimen name="space_zero">1dp</dimen>
+    <dimen name="space_micro">2dp</dimen>
+    <dimen name="space_mini">4dp</dimen>
     <dimen name="space_small">8dp</dimen>
     <dimen name="space_normal">16dp</dimen>
     <dimen name="space_large">32dp</dimen>
+
+    <!-- Base Text Dimensions -->
+    <dimen name="text_header">32sp</dimen>
+    <dimen name="text_button">18sp</dimen>
+
     <dimen name="control_board_button_size">80dp</dimen>
     <dimen name="device_item_divider_start_padding">80dp</dimen>
     <dimen name="device_item_divider_end_padding">16dp</dimen>
-    <dimen name="outlined_button_text_size">18sp</dimen>
+    <dimen name="outlined_button_text_size">@dimen/text_button</dimen>
 </resources>

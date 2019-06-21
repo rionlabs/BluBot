@@ -7,8 +7,12 @@
 
     <color name="accentColor">#FF9800</color>
 
-    <color name="primaryTextColor">#212121</color>
-    <color name="secondaryTextColor">#727272</color>
+    <color name="primaryDarkTextColor">#212121</color>
+    <color name="secondaryDarkTextColor">#727272</color>
+
+    <color name="primaryLightTextColor">#FFFFFF</color>
+    <color name="secondaryLightTextColor">#ECECEC</color>
+
     <color name="linkTextColor">#03A9F4</color>
 
     <color name="iconsLight">#FFFFFF</color>

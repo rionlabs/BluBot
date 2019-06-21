@@ -10,12 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="@dimen/space_normal"
+        android:layout_marginBottom="@dimen/space_normal"
         android:gravity="center"
         android:text="@string/app_name"
-        android:textColor="@color/iconsLight"
-        android:textSize="32sp"
+        android:textColor="@color/primaryLightTextColor"
+        android:textSize="@dimen/text_header"
         android:textStyle="bold" />
 
 </androidx.appcompat.widget.Toolbar>
