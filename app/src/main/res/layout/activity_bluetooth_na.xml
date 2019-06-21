@@ -13,12 +13,7 @@
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+            <include layout="@layout/layout_title_toolbar" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -26,9 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/space_normal"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context=".ui.BluetoothNAActivity"
-            tools:showIn="@layout/activity_bluetooth_na">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ImageView
                 android:id="@+id/blNaImage"
@@ -37,6 +30,7 @@
                 android:layout_margin="@dimen/space_normal"
                 android:contentDescription="@string/bluetooth_not_available"
                 android:src="@drawable/ic_bluetooth_disabled"
+                android:tint="@color/primaryDarkColor"
                 app:layout_constraintBottom_toTopOf="@+id/blNaTitleText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -49,11 +43,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/space_normal"
                 android:text="@string/bluetooth_not_available"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/primaryTextColor"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintBottom_toTopOf="@+id/blNaDescriptionText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blNaImage" />
 
@@ -64,41 +56,37 @@
                 android:layout_margin="@dimen/space_normal"
                 android:gravity="center"
                 android:text="@string/bluetooth_na_description"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/secondaryTextColor"
-                app:layout_constraintBottom_toTopOf="@+id/blNaGithubIssueLink"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                app:layout_constraintBottom_toTopOf="@+id/blNaGithubIssueButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blNaTitleText" />
 
-            <TextView
-                android:id="@+id/blNaGithubIssueLink"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/blNaGithubIssueButton"
+                style="@style/ButtonStyle.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/space_normal"
+                android:layout_marginTop="@dimen/space_normal"
                 android:text="@string/GitHub"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/linkTextColor"
-                app:layout_constraintBottom_toTopOf="@+id/blNaDevEmailLink"
+                app:icon="@drawable/ic_web"
+                app:layout_constraintBottom_toTopOf="@+id/blNaDevEmailButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blNaDescriptionText" />
 
-            <TextView
-                android:id="@+id/blNaDevEmailLink"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/blNaDevEmailButton"
+                style="@style/ButtonStyle.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/space_normal"
+                android:layout_marginTop="@dimen/space_small"
                 android:text="@string/email_developer"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/linkTextColor"
+                app:icon="@drawable/ic_email"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blNaGithubIssueLink" />
+                app:layout_constraintTop_toBottomOf="@+id/blNaGithubIssueButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,7 +1,6 @@
 package org.rionlabs.blubot.ui
 
 import android.content.Intent
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -18,18 +17,9 @@ class BluetoothNAActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bluetooth_na)
 
-        setSupportActionBar(binding.toolbar)
-
         binding.apply {
-            blNaGithubIssueLink.apply {
-                paintFlags = Paint.UNDERLINE_TEXT_FLAG
-                setOnClickListener { openGitHubIssues() }
-            }
-
-            blNaDevEmailLink.apply {
-                paintFlags = Paint.UNDERLINE_TEXT_FLAG
-                setOnClickListener { openEmailClient() }
-            }
+            blNaGithubIssueButton.setOnClickListener { openGitHubIssues() }
+            blNaDevEmailButton.setOnClickListener { openEmailClient() }
         }
     }
 
@@ -46,6 +36,6 @@ class BluetoothNAActivity : AppCompatActivity() {
         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(devEmail))
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
         intent.type = "message/rfc822"
-        startActivity(Intent.createChooser(intent, "Send Email"))
+        startActivity(Intent.createChooser(intent, getString(R.string.send_email_intent_title)))
     }
 }

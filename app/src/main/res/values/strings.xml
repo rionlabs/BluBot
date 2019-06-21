@@ -17,4 +17,5 @@
     <string name="turn_bluetooth_on">Turn Bluetooth On</string>
 
     <string name="cd_bluetooth_device">Bluetooth Device</string>
+    <string name="send_email_intent_title">Send Email</string>
 </resources>
