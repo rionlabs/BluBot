@@ -24,6 +24,10 @@ class DiscoveredDeviceAdapter(private val interactionListener: InteractionListen
         holder.onClick { interactionListener.onDeviceSelected(discoveredDevice.bluetoothDevice) }
     }
 
+    override fun submitList(list: MutableList<DiscoveredDevice>?) {
+        super.submitList(list?.distinct())
+    }
+
     fun addItem(vararg discoveredDevice: DiscoveredDevice) {
         val newList = currentList.toMutableList().apply { addAll(discoveredDevice) }
         submitList(newList)
