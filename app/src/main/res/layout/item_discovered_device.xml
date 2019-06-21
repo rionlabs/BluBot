@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="androidx.core.content.ContextCompat" />
+
         <variable
             name="device"
             type="org.rionlabs.blubot.DiscoveredDevice" />
@@ -21,11 +23,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/space_normal"
             android:contentDescription="@string/cd_bluetooth_device"
-            android:src="@drawable/ic_action_bluetooth"
+            android:src="@{ContextCompat.getDrawable(context, device.deviceTypeIconRes)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iconBarrier"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_action_bluetooth" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/iconBarrier"
