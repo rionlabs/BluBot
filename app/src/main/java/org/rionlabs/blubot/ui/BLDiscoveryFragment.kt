@@ -7,12 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.util.dataItem
 import timber.log.Timber
@@ -22,6 +21,8 @@ class BLDiscoveryFragment : Fragment() {
     private lateinit var binding: FragmentBlDiscoveryBinding
 
     private val deviceAdapter = DiscoveredDeviceAdapter()
+
+    private var inDiscovery: Boolean = false
 
     // Create a BroadcastReceiver for discovery of bluetooth mDeviceList
     private val bluetoothReceiver = object : BroadcastReceiver() {
@@ -42,13 +43,24 @@ class BLDiscoveryFragment : Fragment() {
                         Timber.i("${device.address}-${device.name}")
                     }
                 }
-                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> Timber.d("STATE_DISCOVERY_IN_PROGRESS")
-                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> Timber.d("STATE_DISCOVERY_FINISHED")
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
+                    inDiscovery = true
+                    Timber.d("STATE_DISCOVERY_IN_PROGRESS")
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
+                    inDiscovery = false
+                    Timber.d("STATE_DISCOVERY_FINISHED")
+                }
                 else -> {
                     Timber.w("Action : $action is not bluetooth related.")
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -87,6 +99,18 @@ class BLDiscoveryFragment : Fragment() {
             Toast.makeText(activity, "Bluetooth discovery failed.", Toast.LENGTH_LONG).show()
         else
             Toast.makeText(activity, "Discovery started", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.discovery, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_refresh && inDiscovery.not()) {
+            discoverDevices()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStop() {
