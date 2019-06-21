@@ -8,7 +8,8 @@
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#727272</color>
     <color name="linkTextColor">#03A9F4</color>
-    <color name="icons">#FFFFFF</color>
+    <color name="iconsLight">#FFFFFF</color>
+    <color name="iconsDark">#FFA5A5A5</color>
     <color name="divider">#B6B6B6</color>
 
     <color name="ic_launcher_background">@color/primaryColor</color>
