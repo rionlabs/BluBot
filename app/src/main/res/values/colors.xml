@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Color Pallet -->
-    <color name="primaryColor">#2196F3</color>
-    <color name="primaryDarkColor">#1976D2</color>
-    <color name="primaryLightColor">#BBDEFB</color>
+    <color name="primaryColor">#0082FC</color>
+    <color name="primaryDarkColor">#0057c8</color>
+    <color name="primaryLightColor">#68b1ff</color>
+
     <color name="accentColor">#FF9800</color>
+
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#727272</color>
     <color name="linkTextColor">#03A9F4</color>
+
     <color name="iconsLight">#FFFFFF</color>
     <color name="iconsDark">#FFA5A5A5</color>
+
     <color name="divider">#B6B6B6</color>
 
+    <!-- Individual Colors -->
     <color name="ic_launcher_background">@color/primaryColor</color>
     <color name="launch_background">@android:color/white</color>
 </resources>
