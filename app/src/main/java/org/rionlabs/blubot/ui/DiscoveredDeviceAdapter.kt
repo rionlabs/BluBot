@@ -20,6 +20,11 @@ class DiscoveredDeviceAdapter :
         holder.bind(getItem(position))
     }
 
+    fun addItem(vararg discoveredDevice: DiscoveredDevice) {
+        val newList = currentList.toMutableList().apply { addAll(discoveredDevice) }
+        submitList(newList)
+    }
+
     class DeviceViewHolder(private val binding: ItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(device: DiscoveredDevice) {
