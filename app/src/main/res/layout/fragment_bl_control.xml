@@ -1,17 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.BLControlFragment">
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <org.rionlabs.blubot.ui.view.ControlBoard
-            android:id="@+id/controlBoard"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:background="@drawable/control_sheet_toolbar_background"
+            android:elevation="4dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    style="?borderlessButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="@dimen/space_small"
+                    android:contentDescription="@string/minimize_controls"
+                    android:padding="@dimen/space_normal"
+                    android:src="@drawable/ic_arrow_downward"
+                    android:tint="@color/iconsLight" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textColor="@color/primaryLightTextColor"
+                    tools:text="Connected Device" />
+
+                <ImageButton
+                    style="?borderlessButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="@dimen/space_small"
+                    android:contentDescription="@string/close_connection"
+                    android:padding="@dimen/space_normal"
+                    android:src="@drawable/ic_button_close"
+                    android:tint="@color/iconsLight" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/iconsLight"
+            android:paddingTop="@dimen/space_large"
+            android:paddingBottom="@dimen/space_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <org.rionlabs.blubot.ui.view.ControlBoard
+                android:id="@+id/controlBoard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

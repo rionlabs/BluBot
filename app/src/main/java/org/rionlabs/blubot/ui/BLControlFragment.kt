@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.FragmentBlControlBinding
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
 
-class BLControlFragment : Fragment() {
+class BLControlFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentBlControlBinding
 
@@ -22,6 +23,8 @@ class BLControlFragment : Fragment() {
     private lateinit var mConnectThread: ConnectThread
 
     private var mSocket: BluetoothSocket? = null
+
+    override fun getTheme(): Int = R.style.AppTheme_BottomSheet
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

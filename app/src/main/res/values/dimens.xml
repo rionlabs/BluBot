@@ -15,4 +15,6 @@
     <dimen name="device_item_divider_start_padding">80dp</dimen>
     <dimen name="device_item_divider_end_padding">16dp</dimen>
     <dimen name="outlined_button_text_size">@dimen/text_button</dimen>
+
+    <dimen name="control_sheet_radius">@dimen/space_small</dimen>
 </resources>

@@ -21,4 +21,6 @@
     <string name="action_about">About BluBot</string>
     <string name="action_refresh">Refresh Device List</string>
     <string name="action_settings">Settings</string>
+    <string name="minimize_controls">Minimize Controls</string>
+    <string name="close_connection">Close Connection</string>
 </resources>

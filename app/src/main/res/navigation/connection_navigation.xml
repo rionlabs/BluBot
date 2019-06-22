@@ -37,7 +37,7 @@
 
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/BLControlFragment"
         android:name="org.rionlabs.blubot.ui.BLControlFragment"
         android:label="fragment_bl_control"
@@ -47,6 +47,6 @@
             android:name="connectedDevice"
             app:argType="android.bluetooth.BluetoothDevice" />
 
-    </fragment>
+    </dialog>
 
 </navigation>

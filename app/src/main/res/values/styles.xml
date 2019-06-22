@@ -32,4 +32,12 @@
         <item name="android:tint">@color/iconsLight</item>
     </style>
 
+    <style name="ControlSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="behavior_peekHeight">auto</item>
+        <item name="behavior_hideable">false</item>
+        <item name="behavior_skipCollapsed">false</item>
+    </style>
+
 </resources>

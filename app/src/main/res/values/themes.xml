@@ -21,4 +21,12 @@
         <item name="android:windowBackground">@drawable/drawable_launch</item>
     </style>
 
+    <style name="AppTheme.BottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/ControlSheetStyle</item>
+    </style>
+
 </resources>
