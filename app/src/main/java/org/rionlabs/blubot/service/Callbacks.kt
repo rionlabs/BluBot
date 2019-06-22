@@ -16,3 +16,12 @@ interface DeviceDiscoveryCallback {
 
     fun onDeviceDiscovered(bluetoothDevice: BluetoothDevice)
 }
+
+interface DeviceBondCallback {
+
+    fun onConnectionStarted(bluetoothDevice: BluetoothDevice)
+
+    fun onConnected(bluetoothDevice: BluetoothDevice)
+
+    fun onConnectionEnded(bluetoothDevice: BluetoothDevice)
+}

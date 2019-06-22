@@ -19,6 +19,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
     private val bluetoothStateCallbackList = mutableListOf<BluetoothStateCallback>()
     private val discoveryStateCallbackList = mutableListOf<DiscoveryStateCallback>()
     private val deviceDiscoveryCallbackList = mutableListOf<DeviceDiscoveryCallback>()
+    private val deviceBondCallbackList = mutableListOf<DeviceBondCallback>()
 
     val isBluetoothAvailable: Boolean
         get() {
@@ -31,6 +32,8 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         }
 
     var isInDiscovery: Boolean = false
+
+    var connectedDevice: BluetoothDevice? = null
 
     private val mBluetoothStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -109,6 +112,36 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         }
     }
 
+    private val bondStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+            val bondState =
+                intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+
+            if (device != null) {
+                when (bondState) {
+                    BluetoothDevice.BOND_BONDED -> {
+                        connectedDevice = device
+                        for (deviceBondCallback in deviceBondCallbackList) {
+                            deviceBondCallback.onConnected(device)
+                        }
+                    }
+                    BluetoothDevice.BOND_BONDING -> {
+                        for (deviceBondCallback in deviceBondCallbackList) {
+                            deviceBondCallback.onConnectionStarted(device)
+                        }
+                    }
+                    BluetoothDevice.BOND_NONE -> {
+                        connectedDevice = null
+                        for (deviceBondCallback in deviceBondCallbackList) {
+                            deviceBondCallback.onConnectionEnded(device)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     fun addBluetoothStateCallback(stateCallback: BluetoothStateCallback) {
         bluetoothStateCallbackList.add(stateCallback)
     }
@@ -133,6 +166,36 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         deviceDiscoveryCallbackList.remove(deviceCallback)
     }
 
+    fun addDeviceBondCallback(deviceBondCallback: DeviceBondCallback) {
+        deviceBondCallbackList.add(deviceBondCallback)
+    }
+
+    fun removeDeviceBondCallback(deviceBondCallback: DeviceBondCallback) {
+        deviceBondCallbackList.remove(deviceBondCallback)
+    }
+
+    fun startConnectionTo(bluetoothDevice: BluetoothDevice) {
+        // Cancel discovery to make connection faster
+        bluetoothAdapter?.cancelDiscovery()
+
+        if (bluetoothDevice.bondState == BluetoothDevice.BOND_NONE) {
+            bluetoothDevice.createBond()
+        } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
+            connectedDevice = bluetoothDevice
+        }
+    }
+
+    /**
+     * Needs BLUETOOTH_ADMIN permission
+     */
+    fun startDiscovery(): Boolean {
+        return bluetoothAdapter?.startDiscovery() ?: false
+    }
+
+    fun getBondedDevices(): MutableSet<BluetoothDevice> {
+        return bluetoothAdapter?.bondedDevices ?: mutableSetOf()
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onAppCreated() {
         // Initialise Bluetooth Adapter
@@ -151,6 +214,9 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
 
         val deviceDiscoveryFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         appContext.registerReceiver(deviceDiscoveryReceiver, deviceDiscoveryFilter)
+
+        val bondStateFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        appContext.registerReceiver(bondStateReceiver, bondStateFilter)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -158,5 +224,6 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         appContext.unregisterReceiver(mBluetoothStateReceiver)
         appContext.unregisterReceiver(discoveryStateReceiver)
         appContext.unregisterReceiver(deviceDiscoveryReceiver)
+        appContext.unregisterReceiver(bondStateReceiver)
     }
 }
