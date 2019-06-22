@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
@@ -72,8 +71,7 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
             if (selectedDevice != null && device.address == selectedDevice?.address) {
                 when (bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        val startControl = BLDiscoveryFragmentDirections.startControl(device)
-                        findNavController().navigate(startControl)
+                        // TODO startControl
                     }
                 }
             }
@@ -132,8 +130,7 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
         if (device.bondState == BluetoothDevice.BOND_NONE) {
             device.createBond()
         } else if (device.bondState == BluetoothDevice.BOND_BONDED) {
-            val startControl = BLDiscoveryFragmentDirections.startControl(device)
-            findNavController().navigate(startControl)
+            // TODO startControl
         }
     }
 

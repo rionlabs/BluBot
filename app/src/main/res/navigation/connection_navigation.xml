@@ -26,27 +26,6 @@
             app:popEnterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_exit_anim" />
 
-        <action
-            android:id="@+id/startControl"
-            app:destination="@id/BLControlFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:launchSingleTop="true"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-
     </fragment>
-
-    <dialog
-        android:id="@+id/BLControlFragment"
-        android:name="org.rionlabs.blubot.ui.BLControlFragment"
-        android:label="fragment_bl_control"
-        tools:layout="@layout/fragment_bl_control">
-
-        <argument
-            android:name="connectedDevice"
-            app:argType="android.bluetooth.BluetoothDevice" />
-
-    </dialog>
 
 </navigation>

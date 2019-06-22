@@ -2,55 +2,32 @@ package org.rionlabs.blubot.ui
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.rionlabs.blubot.R
-import org.rionlabs.blubot.databinding.FragmentBlControlBinding
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
 
-class BLControlFragment : BottomSheetDialogFragment() {
-
-    private lateinit var binding: FragmentBlControlBinding
-
-    private val args: BLControlFragmentArgs by navArgs()
+class BLControlFragment {
 
     private lateinit var mConnectThread: ConnectThread
 
     private var mSocket: BluetoothSocket? = null
 
-    override fun getTheme(): Int = R.style.AppTheme_BottomSheet
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentBlControlBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.controlBoard.setOnButtonClickListener { button ->
-            mSocket?.let {
-                runCatching {
-                    it.outputStream.apply {
-                        write(ByteArray(button.signal))
-                        flush()
-                    }
-                }.onFailure {
-                    Timber.e(it, "Failed to write signal")
-                }
-            }
-        }
-        mConnectThread = ConnectThread(args.connectedDevice).also {
-            it.start()
-        }
-    }
+// Intialize
+//        controlBoard.setOnButtonClickListener { button ->
+//            mSocket?.let {
+//                runCatching {
+//                    it.outputStream.apply {
+//                        write(ByteArray(button.signal))
+//                        flush()
+//                    }
+//                }.onFailure {
+//                    Timber.e(it, "Failed to write signal")
+//                }
+//            }
+//        }
+//        mConnectThread = ConnectThread(connectedDevice).also {
+//            it.start()
+//        }
 
     fun setSocket(socket: BluetoothSocket?) {
         mSocket = socket
@@ -88,9 +65,9 @@ class BLControlFragment : BottomSheetDialogFragment() {
 
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
-            activity?.runOnUiThread {
-                setSocket(mmSocket)
-            }
+//            runOnUiThread {
+//                setSocket(mmSocket)
+//            }
         }
 
         /**
@@ -105,11 +82,8 @@ class BLControlFragment : BottomSheetDialogFragment() {
 
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mConnectThread.cancel()
-    }
+// OnDestroy
+//        mConnectThread.cancel()
 
     companion object {
         private const val SERVER_UUID = "00001101-0000-1000-8000-00805F9B34FB"
