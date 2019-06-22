@@ -1,9 +1,10 @@
-package org.rionlabs.blubot.ui
+package org.rionlabs.blubot.ui.begin
 
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import org.rionlabs.blubot.ui.ConnectionActivity
 import timber.log.Timber
 
 class LaunchActivity : AppCompatActivity() {

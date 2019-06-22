@@ -1,4 +1,4 @@
-package org.rionlabs.blubot.ui
+package org.rionlabs.blubot.ui.begin
 
 import android.content.Intent
 import android.net.Uri

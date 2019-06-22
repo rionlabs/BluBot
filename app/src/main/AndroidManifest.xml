@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.LaunchActivity"
+            android:name=".ui.begin.LaunchActivity"
             android:theme="@style/AppTheme.Launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".ui.BluetoothNAActivity"
+            android:name=".ui.begin.BluetoothNAActivity"
             android:label="@string/title_activity_bluetooth_na"
             android:theme="@style/AppTheme.NoActionBar" />
 
