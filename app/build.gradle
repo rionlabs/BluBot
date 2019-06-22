@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
@@ -31,6 +32,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha05'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha06'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0"
+
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.1'

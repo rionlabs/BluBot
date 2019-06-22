@@ -1,4 +1,4 @@
-package org.rionlabs.blubot
+package org.rionlabs.blubot.service
 
 import android.bluetooth.BluetoothAdapter
 
