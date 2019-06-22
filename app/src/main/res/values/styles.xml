@@ -26,4 +26,10 @@
         <item name="strokeColor">@color/primaryDarkColor</item>
     </style>
 
+    <style name="ButtonStyle.ToolbarButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_weight">1</item>
+        <item name="iconTint">@color/iconsLight</item>
+        <item name="android:tint">@color/iconsLight</item>
+    </style>
+
 </resources>

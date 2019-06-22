@@ -18,4 +18,7 @@
 
     <string name="cd_bluetooth_device">Bluetooth Device</string>
     <string name="send_email_intent_title">Send Email</string>
+    <string name="action_about">About BluBot</string>
+    <string name="action_refresh">Refresh Device List</string>
+    <string name="action_settings">Settings</string>
 </resources>

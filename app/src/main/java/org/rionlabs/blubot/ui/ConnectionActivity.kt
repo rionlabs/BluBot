@@ -1,26 +1,32 @@
 package org.rionlabs.blubot.ui
 
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import kotlinx.android.synthetic.main.activity_connection.*
 import org.rionlabs.blubot.BluetoothState
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.databinding.ActivityConnectionBinding
 import timber.log.Timber
 
 class ConnectionActivity : BluetoothActivity() {
 
-    lateinit var navController: NavController
+    private lateinit var binding: ActivityConnectionBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_connection)
-        setSupportActionBar(toolbar)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_connection)
         navController = findNavController(R.id.connection_navigation_host)
 
         if (!isBluetoothEnable) {
             navController.navigate(R.id.enableBluetooth)
+        }
+
+        binding.apply {
+            aboutButton.setOnClickListener { }
+            refreshButton.setOnClickListener { }
+            settingsButton.setOnClickListener { }
         }
     }
 
