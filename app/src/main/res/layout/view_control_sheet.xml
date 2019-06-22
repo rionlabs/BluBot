@@ -34,6 +34,7 @@
                         android:layout_height="48dp">
 
                         <ImageButton
+                            android:id="@+id/navigationButton"
                             style="?borderlessButtonStyle"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
@@ -45,6 +46,7 @@
                             android:tint="@color/iconsLight" />
 
                         <ProgressBar
+                            android:id="@+id/navigationProgressBar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -54,6 +56,7 @@
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/toolbarTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -64,6 +67,7 @@
                         tools:text="Connected Device" />
 
                     <ImageButton
+                        android:id="@+id/closeButton"
                         style="?borderlessButtonStyle"
                         android:layout_width="48dp"
                         android:layout_height="48dp"

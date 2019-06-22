@@ -33,7 +33,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
 
     var isInDiscovery: Boolean = false
 
-    var connectedDevice: BluetoothDevice? = null
+    var selectedDevice: BluetoothDevice? = null
 
     private val mBluetoothStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -121,7 +121,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
             if (device != null) {
                 when (bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        connectedDevice = device
+                        selectedDevice = device
                         for (deviceBondCallback in deviceBondCallbackList) {
                             deviceBondCallback.onConnected(device)
                         }
@@ -132,7 +132,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
                         }
                     }
                     BluetoothDevice.BOND_NONE -> {
-                        connectedDevice = null
+                        selectedDevice = null
                         for (deviceBondCallback in deviceBondCallbackList) {
                             deviceBondCallback.onConnectionEnded(device)
                         }
@@ -181,7 +181,10 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         if (bluetoothDevice.bondState == BluetoothDevice.BOND_NONE) {
             bluetoothDevice.createBond()
         } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
-            connectedDevice = bluetoothDevice
+            selectedDevice = bluetoothDevice
+            for (deviceBondCallback in deviceBondCallbackList) {
+                deviceBondCallback.onConnected(bluetoothDevice)
+            }
         }
     }
 

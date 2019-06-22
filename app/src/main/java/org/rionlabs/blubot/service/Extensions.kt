@@ -1,6 +1,7 @@
 package org.rionlabs.blubot.service
 
 import android.app.Activity
+import android.view.View
 import androidx.fragment.app.Fragment
 import org.rionlabs.blubot.BluBot
 
@@ -12,3 +13,6 @@ val Fragment.bluetoothManager: BluetoothManager?
 
 fun Fragment.requireBluetoothManager(): BluetoothManager =
     (requireActivity().application as BluBot).bluetoothManager
+
+val View.bluetoothManager: BluetoothManager
+    get() = (context.applicationContext as BluBot).bluetoothManager
