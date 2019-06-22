@@ -14,11 +14,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
+import org.rionlabs.blubot.service.DeviceDiscoveryCallback
+import org.rionlabs.blubot.service.DiscoveryStateCallback
+import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 import org.rionlabs.blubot.util.dataItem
-import timber.log.Timber
 
-class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListener {
+class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListener,
+    DiscoveryStateCallback, DeviceDiscoveryCallback {
 
     private lateinit var binding: FragmentBlDiscoveryBinding
 
@@ -27,40 +30,6 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
     private var selectedDevice: BluetoothDevice? = null
 
     private var inDiscovery: Boolean = false
-
-    // Create a BroadcastReceiver for discovery of bluetooth mDeviceList
-    private val bluetoothReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (action == null || action.isEmpty())
-                return
-
-            // When discovery finds a device
-            when (action) {
-                BluetoothDevice.ACTION_FOUND -> {
-                    // Get the BluetoothDevice object from the Intent
-                    val device =
-                        intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    // Add the name and address to an array mDeviceAdapter to show in a ListView
-                    if (device != null) {
-                        deviceAdapter.addItem(device.dataItem())
-                        Timber.i("${device.address}-${device.name}")
-                    }
-                }
-                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
-                    inDiscovery = true
-                    Timber.d("STATE_DISCOVERY_IN_PROGRESS")
-                }
-                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                    inDiscovery = false
-                    Timber.d("STATE_DISCOVERY_FINISHED")
-                }
-                else -> {
-                    Timber.w("Action : $action is not bluetooth related.")
-                }
-            }
-        }
-    }
 
     private val bondStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -91,17 +60,21 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
 
     override fun onStart() {
         super.onStart()
-
-        // Register the BroadcastReceiver
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        requireContext().registerReceiver(bluetoothReceiver, filter)
+        requireBluetoothManager().addDeviceDiscoveryCallback(this)
+        requireBluetoothManager().addDiscoveryStateCallback(this)
 
         discoverDevices()
 
         val bondedDevices = BluetoothAdapter.getDefaultAdapter().bondedDevices
         deviceAdapter.addItem(*bondedDevices.map { it.dataItem() }.toTypedArray())
+    }
+
+    override fun onDiscoveryStateChanged(isDiscovering: Boolean) {
+        inDiscovery = isDiscovering
+    }
+
+    override fun onDeviceDiscovered(bluetoothDevice: BluetoothDevice) {
+        deviceAdapter.addItem(bluetoothDevice.dataItem())
     }
 
     private fun discoverDevices() {
@@ -138,6 +111,7 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
 
     override fun onStop() {
         super.onStop()
-        requireContext().unregisterReceiver(bluetoothReceiver)
+        requireBluetoothManager().removeDiscoveryStateCallback(this)
+        requireBluetoothManager().removeDeviceDiscoveryCallback(this)
     }
 }

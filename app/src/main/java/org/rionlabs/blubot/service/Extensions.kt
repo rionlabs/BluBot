@@ -9,3 +9,6 @@ val Activity.bluetoothManager: BluetoothManager
 
 val Fragment.bluetoothManager: BluetoothManager?
     get() = (activity?.application as BluBot).bluetoothManager
+
+fun Fragment.requireBluetoothManager(): BluetoothManager =
+    (requireActivity().application as BluBot).bluetoothManager

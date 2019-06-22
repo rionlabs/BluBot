@@ -23,7 +23,7 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_connection)
         navController = findNavController(R.id.connection_navigation_host)
 
-        bluetoothManager.addStateCallback(this)
+        bluetoothManager.addBluetoothStateCallback(this)
 
         if (!bluetoothManager.isBluetoothEnable) {
             navController.navigate(R.id.enableBluetooth)
@@ -49,6 +49,6 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
 
     override fun onDestroy() {
         super.onDestroy()
-        bluetoothManager.removeStateCallback(this)
+        bluetoothManager.removeBluetoothStateCallback(this)
     }
 }
