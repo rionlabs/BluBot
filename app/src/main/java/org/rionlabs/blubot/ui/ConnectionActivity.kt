@@ -1,6 +1,8 @@
 package org.rionlabs.blubot.ui
 
 import android.os.Bundle
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -25,7 +27,10 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
         bluetoothManager.addBluetoothStateCallback(this)
 
         if (!bluetoothManager.isBluetoothEnable) {
+            binding.refreshButton.visibility = INVISIBLE
             navController.navigate(R.id.enableBluetooth)
+        } else {
+            binding.refreshButton.visibility = VISIBLE
         }
 
         binding.apply {
@@ -37,10 +42,20 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
 
     override fun onBluetoothStateChanged(current: BluetoothState, previous: BluetoothState) {
         when (current) {
-            BluetoothState.OFF -> navController.navigate(R.id.enableBluetooth)
-            BluetoothState.TURNING_ON -> Timber.d("State changing to ON")
-            BluetoothState.ON -> navController.popBackStack()
-            BluetoothState.TURNING_OFF -> Timber.d("State changing to OFF")
+            BluetoothState.OFF -> {
+                navController.navigate(R.id.enableBluetooth)
+                binding.refreshButton.visibility = INVISIBLE
+            }
+            BluetoothState.TURNING_ON -> {
+                Timber.d("State changing to ON")
+            }
+            BluetoothState.ON -> {
+                navController.popBackStack()
+                binding.refreshButton.visibility = VISIBLE
+            }
+            BluetoothState.TURNING_OFF -> {
+                Timber.d("State changing to OFF")
+            }
         }
     }
 
