@@ -7,12 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 import org.rionlabs.blubot.util.dataItem
@@ -136,17 +137,7 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.discovery, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_refresh && inDiscovery.not()) {
-            discoverDevices()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
+    // TODO add listener to refresh button in ConnectionActivity
 
     override fun onStop() {
         super.onStop()
