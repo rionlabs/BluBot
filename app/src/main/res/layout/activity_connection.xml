@@ -81,10 +81,7 @@
             android:layout_gravity="bottom"
             android:elevation="@dimen/control_sheet_elevation"
             app:behavior_hideable="false"
-            app:behavior_peekHeight="@dimen/control_sheet_toolbar_height"
-            app:layout_anchorGravity="bottom"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:layout_keyline="@android:integer/config_mediumAnimTime" />
+            app:layout_anchorGravity="bottom" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -228,5 +228,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         appContext.unregisterReceiver(discoveryStateReceiver)
         appContext.unregisterReceiver(deviceDiscoveryReceiver)
         appContext.unregisterReceiver(bondStateReceiver)
+
+        selectedDevice = null
     }
 }
