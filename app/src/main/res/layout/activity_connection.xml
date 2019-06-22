@@ -6,6 +6,7 @@
     tools:context=".ui.ConnectionActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -71,8 +72,19 @@
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/connection_navigation" />
-
         </FrameLayout>
+
+        <org.rionlabs.blubot.ui.view.ControlSheet
+            android:id="@+id/controlSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:elevation="@dimen/control_sheet_elevation"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="@dimen/control_sheet_toolbar_height"
+            app:layout_anchorGravity="bottom"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_keyline="@android:integer/config_mediumAnimTime" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

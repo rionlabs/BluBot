@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.rionlabs.blubot.BluetoothState
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
@@ -22,6 +23,8 @@ class ConnectionActivity : BluetoothActivity() {
         if (!isBluetoothEnable) {
             navController.navigate(R.id.enableBluetooth)
         }
+
+        val behavior = BottomSheetBehavior.from(binding.controlSheet)
 
         binding.apply {
             aboutButton.setOnClickListener { }
