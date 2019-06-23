@@ -58,11 +58,11 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
     }
 
     override fun onConnected(bluetoothDevice: BluetoothDevice) {
-        // TODO To change body of created functions
+        deviceAdapter.notifyDataSetChanged()
     }
 
     override fun onConnectionEnded(bluetoothDevice: BluetoothDevice) {
-        // TODO To change body of created functions
+        deviceAdapter.notifyDataSetChanged()
     }
 
     private fun discoverDevices() {

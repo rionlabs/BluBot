@@ -2,6 +2,7 @@ package org.rionlabs.blubot
 
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.BOND_BONDED
 
 data class DiscoveredDevice(
     val name: String,
@@ -48,6 +49,7 @@ data class DiscoveredDevice(
         else -> R.drawable.device_class_unknown_device
     }
 
+    val connected: Boolean = bluetoothDevice.bondState == BOND_BONDED
 
     companion object {
         const val PERIPHERAL_KEYBOARD = 0x0540

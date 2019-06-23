@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <import type="androidx.core.content.ContextCompat" />
 
         <variable
@@ -52,7 +54,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/primaryDarkTextColor"
             app:layout_constraintBottom_toTopOf="@+id/deviceSsidText"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/iconBarrierEnd"
             app:layout_constraintStart_toEndOf="@id/iconBarrier"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
@@ -69,10 +71,35 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/secondaryDarkTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/iconBarrierEnd"
             app:layout_constraintStart_toEndOf="@id/iconBarrier"
             app:layout_constraintTop_toBottomOf="@+id/deviceNameText"
             tools:text="AA:BB:CC:DD:EE:FF" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/iconBarrierEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="connectedIcon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/connectedIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/connectedIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="@dimen/space_small"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:contentDescription="@string/cd_bluetooth_device"
+            android:src="@drawable/ic_connection_link"
+            android:tint="@color/primaryDarkColor"
+            android:visibility="@{device.connected ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/iconBarrierEnd"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
