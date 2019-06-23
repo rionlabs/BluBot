@@ -61,15 +61,15 @@ class ControlBoard @JvmOverloads constructor(
         fun onButtonClicked(button: Button)
     }
 
-    enum class Button(val signal: Int) {
-        A(0xA),
-        B(0xB),
-        C(0xC),
-        D(0xD),
-        UP(0x1),
-        DOWN(0x2),
-        LEFT(0x3),
-        RIGHT(0x4),
-        CLOSE(0x0)
+    enum class Button(val signal: String) {
+        A("0x0A"),
+        B("0x0B"),
+        C("0x0C"),
+        D("0x0D"),
+        UP("0x01"),
+        DOWN("0x02"),
+        LEFT("0x03"),
+        RIGHT("0x04"),
+        CLOSE("0x00")
     }
 }

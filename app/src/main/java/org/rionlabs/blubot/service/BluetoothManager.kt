@@ -21,6 +21,8 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
     private val deviceDiscoveryCallbackList = mutableListOf<DeviceDiscoveryCallback>()
     private val deviceBondCallbackList = mutableListOf<DeviceBondCallback>()
 
+    private val connectionMap = mutableMapOf<BluetoothDevice, DeviceConnection>()
+
     val isBluetoothAvailable: Boolean
         get() {
             return bluetoothAdapter != null
@@ -185,6 +187,14 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
             for (deviceBondCallback in deviceBondCallbackList) {
                 deviceBondCallback.onConnected(bluetoothDevice)
             }
+        }
+    }
+
+    fun getOrStartConnection(device: BluetoothDevice): DeviceConnection {
+        return connectionMap[device] ?: run {
+            val connection = DeviceConnection(device)
+            connectionMap[device] = connection
+            connection
         }
     }
 

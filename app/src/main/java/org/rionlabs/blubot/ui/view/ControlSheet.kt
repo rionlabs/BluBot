@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -56,6 +58,16 @@ class ControlSheet @JvmOverloads constructor(
         binding.apply {
             navigationButton.setOnClickListener { changeState() }
         }
+
+        binding.controlBoard.setOnButtonClickListener {
+            bluetoothManager.apply {
+                selectedDevice?.let { device ->
+                    getOrStartConnection(device).sendSignal(it.signal)
+                } ?: run {
+                    Toast.makeText(context, "Not connected", LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -90,6 +102,7 @@ class ControlSheet @JvmOverloads constructor(
         bluetoothManager.selectedDevice?.apply {
             bottomSheetBehavior.peekHeight = collapsedHeight
         }
+        // Expand for remote control
     }
 
     override fun onConnectionEnded(bluetoothDevice: BluetoothDevice) {
