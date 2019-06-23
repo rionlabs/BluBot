@@ -49,22 +49,25 @@ class ControlSheet @JvmOverloads constructor(
     private var collapsedHeight: Int = 0
 
     init {
-        binding.apply {
-            navigationProgressBar.visibility = GONE
-            navigationButton.visibility = GONE
-            closeButton.visibility = GONE
-        }
 
-        binding.apply {
-            navigationButton.setOnClickListener { changeState() }
-        }
+        if (!isInEditMode) {
+            binding.apply {
+                navigationProgressBar.visibility = GONE
+                navigationButton.visibility = GONE
+                closeButton.visibility = GONE
+            }
 
-        binding.controlBoard.setOnButtonClickListener {
-            bluetoothManager.apply {
-                selectedDevice?.let { device ->
-                    getOrStartConnection(device).sendSignal(it.signal)
-                } ?: run {
-                    Toast.makeText(context, "Not connected", LENGTH_SHORT).show()
+            binding.apply {
+                navigationButton.setOnClickListener { changeState() }
+            }
+
+            binding.controlBoard.setOnButtonClickListener {
+                bluetoothManager.apply {
+                    selectedDevice?.let { device ->
+                        getOrStartConnection(device).sendSignal(it.signal)
+                    } ?: run {
+                        Toast.makeText(context, "Not connected", LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -77,6 +80,9 @@ class ControlSheet @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        if (isInEditMode) {
+            return
+        }
         bluetoothManager.addDeviceBondCallback(this)
         bluetoothManager.selectedDevice?.apply {
             bottomSheetBehavior.peekHeight = collapsedHeight
