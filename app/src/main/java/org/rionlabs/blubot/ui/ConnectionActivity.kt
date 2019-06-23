@@ -1,8 +1,7 @@
 package org.rionlabs.blubot.ui
 
 import android.os.Bundle
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -11,10 +10,11 @@ import org.rionlabs.blubot.R
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
 import org.rionlabs.blubot.service.BluetoothState
 import org.rionlabs.blubot.service.BluetoothStateCallback
+import org.rionlabs.blubot.service.DiscoveryStateCallback
 import org.rionlabs.blubot.service.bluetoothManager
 import timber.log.Timber
 
-class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
+class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback, DiscoveryStateCallback {
 
     private lateinit var binding: ActivityConnectionBinding
     private lateinit var navController: NavController
@@ -25,6 +25,7 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
         navController = findNavController(R.id.connection_navigation_host)
 
         bluetoothManager.addBluetoothStateCallback(this)
+        bluetoothManager.addDiscoveryStateCallback(this)
 
         if (!bluetoothManager.isBluetoothEnable) {
             binding.refreshButton.visibility = INVISIBLE
@@ -35,9 +36,11 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
 
         binding.apply {
             aboutButton.setOnClickListener { }
-            refreshButton.setOnClickListener { }
+            refreshButton.setOnClickListener { bluetoothManager.startDiscovery() }
             settingsButton.setOnClickListener { }
         }
+
+        toggleRefreshMenu(bluetoothManager.isInDiscovery)
     }
 
     override fun onBluetoothStateChanged(current: BluetoothState, previous: BluetoothState) {
@@ -59,8 +62,25 @@ class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback {
         }
     }
 
+    override fun onDiscoveryStateChanged(isDiscovering: Boolean) {
+        toggleRefreshMenu(isDiscovering)
+    }
+
+    private fun toggleRefreshMenu(isDiscovering: Boolean) {
+        binding.apply {
+            if (isDiscovering) {
+                refreshButton.visibility = GONE
+                refreshProgressBar.visibility = VISIBLE
+            } else {
+                refreshButton.visibility = VISIBLE
+                refreshProgressBar.visibility = GONE
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         bluetoothManager.removeBluetoothStateCallback(this)
+        bluetoothManager.removeDiscoveryStateCallback(this)
     }
 }
