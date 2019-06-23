@@ -35,7 +35,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/action_about"
-                        android:src="@drawable/ic_action_about" />
+                        android:src="@drawable/ic_action_about"
+                        android:visibility="invisible" />
 
                     <ImageButton
                         android:id="@+id/refreshButton"
@@ -51,7 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/action_settings"
-                        android:src="@drawable/ic_action_settings" />
+                        android:src="@drawable/ic_action_settings"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
 
