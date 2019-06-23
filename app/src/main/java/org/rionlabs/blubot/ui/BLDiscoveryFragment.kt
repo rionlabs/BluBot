@@ -39,9 +39,6 @@ class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListe
         requireBluetoothManager().addDiscoveryStateCallback(this)
         requireBluetoothManager().addDeviceBondCallback(this)
 
-        val bondedDevices = requireBluetoothManager().getBondedDevices()
-        deviceAdapter.addItem(*bondedDevices.map { it.dataItem() }.toTypedArray())
-
         discoverDevices()
     }
 

@@ -202,11 +202,12 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
      * Needs BLUETOOTH_ADMIN permission
      */
     fun startDiscovery(): Boolean {
-        return bluetoothAdapter?.startDiscovery() ?: false
-    }
+        val bondedDevices = bluetoothAdapter?.bondedDevices ?: mutableSetOf()
+        for (bondedDevice in bondedDevices) {
+            deviceDiscoveryCallbackList.forEach { it.onDeviceDiscovered(bondedDevice) }
+        }
 
-    fun getBondedDevices(): MutableSet<BluetoothDevice> {
-        return bluetoothAdapter?.bondedDevices ?: mutableSetOf()
+        return bluetoothAdapter?.startDiscovery() ?: false
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
