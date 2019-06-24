@@ -1,4 +1,4 @@
-package org.rionlabs.blubot
+package org.rionlabs.blubot.bl
 
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice

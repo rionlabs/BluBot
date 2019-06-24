@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.rionlabs.blubot.DiscoveredDevice
+import org.rionlabs.blubot.bl.DiscoveredDevice
 import org.rionlabs.blubot.databinding.ItemDiscoveredDeviceBinding as ItemBinding
 
 class DiscoveredDeviceAdapter(private val interactionListener: InteractionListener) :
