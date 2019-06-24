@@ -7,10 +7,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.BluetoothState
+import org.rionlabs.blubot.bl.BluetoothStateCallback
+import org.rionlabs.blubot.bl.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
-import org.rionlabs.blubot.service.BluetoothState
-import org.rionlabs.blubot.service.BluetoothStateCallback
-import org.rionlabs.blubot.service.DiscoveryStateCallback
 import org.rionlabs.blubot.service.bluetoothManager
 import timber.log.Timber
 

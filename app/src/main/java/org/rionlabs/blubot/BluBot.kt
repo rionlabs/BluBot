@@ -5,7 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
-import org.rionlabs.blubot.service.BluetoothManager
+import org.rionlabs.blubot.bl.BluetoothManager
 import timber.log.Timber
 
 class BluBot : Application() {

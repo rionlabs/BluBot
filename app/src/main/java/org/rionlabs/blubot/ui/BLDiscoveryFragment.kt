@@ -21,8 +21,12 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.DeviceBondCallback
+import org.rionlabs.blubot.bl.DeviceDiscoveryCallback
+import org.rionlabs.blubot.bl.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
-import org.rionlabs.blubot.service.*
+import org.rionlabs.blubot.service.bluetoothManager
+import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 import org.rionlabs.blubot.util.dataItem
 

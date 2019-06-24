@@ -13,8 +13,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.DeviceBondCallback
 import org.rionlabs.blubot.databinding.ViewControlSheetBinding
-import org.rionlabs.blubot.service.DeviceBondCallback
 import org.rionlabs.blubot.service.bluetoothManager
 
 class ControlSheet @JvmOverloads constructor(
