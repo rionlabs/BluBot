@@ -30,12 +30,12 @@ import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 import org.rionlabs.blubot.util.dataItem
 
-class BLDiscoveryFragment : Fragment(), DiscoveredDeviceAdapter.InteractionListener,
+class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
     DiscoveryStateCallback, DeviceDiscoveryCallback, DeviceBondCallback {
 
     private lateinit var binding: FragmentBlDiscoveryBinding
 
-    private val deviceAdapter = DiscoveredDeviceAdapter(this)
+    private val deviceAdapter = DeviceAdapter(this)
 
     private var inDiscovery: Boolean = false
 

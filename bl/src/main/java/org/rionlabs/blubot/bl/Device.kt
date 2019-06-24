@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothDevice.BOND_BONDED
 
-data class DiscoveredDevice(
+data class Device(
     val name: String,
     val ssid: String,
     val bluetoothDevice: BluetoothDevice

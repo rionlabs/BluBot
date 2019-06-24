@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.rionlabs.blubot.bl.DiscoveredDevice
-import org.rionlabs.blubot.databinding.ItemDiscoveredDeviceBinding as ItemBinding
+import org.rionlabs.blubot.bl.Device
+import org.rionlabs.blubot.databinding.ItemDeviceBinding as ItemBinding
 
-class DiscoveredDeviceAdapter(private val interactionListener: InteractionListener) :
-    ListAdapter<DiscoveredDevice, DiscoveredDeviceAdapter.DeviceViewHolder>(DIFF_CALLBACK) {
+class DeviceAdapter(private val interactionListener: InteractionListener) :
+    ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -24,18 +24,18 @@ class DiscoveredDeviceAdapter(private val interactionListener: InteractionListen
         holder.onClick { interactionListener.onDeviceSelected(discoveredDevice.bluetoothDevice) }
     }
 
-    override fun submitList(list: MutableList<DiscoveredDevice>?) {
+    override fun submitList(list: MutableList<Device>?) {
         super.submitList(list?.distinct())
     }
 
-    fun addItem(vararg discoveredDevice: DiscoveredDevice) {
-        val newList = currentList.toMutableList().apply { addAll(discoveredDevice) }
+    fun addItem(vararg device: Device) {
+        val newList = currentList.toMutableList().apply { addAll(device) }
         submitList(newList)
     }
 
     class DeviceViewHolder(private val binding: ItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(device: DiscoveredDevice) {
+        fun bind(device: Device) {
             if (device.name.isEmpty()) {
                 binding.device = device.copy(name = device.ssid)
                 binding.deviceSsidText.visibility = GONE
@@ -51,12 +51,12 @@ class DiscoveredDeviceAdapter(private val interactionListener: InteractionListen
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DiscoveredDevice>() {
-            override fun areItemsTheSame(old: DiscoveredDevice, new: DiscoveredDevice): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Device>() {
+            override fun areItemsTheSame(old: Device, new: Device): Boolean {
                 return old.ssid == new.ssid
             }
 
-            override fun areContentsTheSame(old: DiscoveredDevice, new: DiscoveredDevice): Boolean {
+            override fun areContentsTheSame(old: Device, new: Device): Boolean {
                 return old == new
             }
         }

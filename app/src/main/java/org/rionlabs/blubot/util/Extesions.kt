@@ -1,8 +1,8 @@
 package org.rionlabs.blubot.util
 
 import android.bluetooth.BluetoothDevice
-import org.rionlabs.blubot.bl.DiscoveredDevice
+import org.rionlabs.blubot.bl.Device
 
-fun BluetoothDevice.dataItem(): DiscoveredDevice {
-    return DiscoveredDevice(name.orEmpty(), address.orEmpty(), this)
+fun BluetoothDevice.dataItem(): Device {
+    return Device(name.orEmpty(), address.orEmpty(), this)
 }

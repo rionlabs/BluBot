@@ -12,7 +12,7 @@
 
         <variable
             name="device"
-            type="org.rionlabs.blubot.bl.DiscoveredDevice" />
+            type="org.rionlabs.blubot.bl.Device" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
