@@ -6,13 +6,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import timber.log.Timber
 import android.bluetooth.BluetoothManager as SystemBluetoothManager
 
-class BluetoothManager(private val appContext: Context) : LifecycleObserver {
+class BluetoothManager(private val appContext: Context) {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
@@ -144,6 +141,11 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         }
     }
 
+    init {
+        // Initialise Bluetooth Adapter
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    }
+
     fun addBluetoothStateCallback(stateCallback: BluetoothStateCallback) {
         bluetoothStateCallbackList.add(stateCallback)
     }
@@ -210,14 +212,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         return bluetoothAdapter?.startDiscovery() ?: false
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onAppCreated() {
-        // Initialise Bluetooth Adapter
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onAppStarted() {
+    fun start() {
         val bluetoothStateFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         appContext.registerReceiver(mBluetoothStateReceiver, bluetoothStateFilter)
 
@@ -233,8 +228,7 @@ class BluetoothManager(private val appContext: Context) : LifecycleObserver {
         appContext.registerReceiver(bondStateReceiver, bondStateFilter)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onAppStopped() {
+    fun stop() {
         appContext.unregisterReceiver(mBluetoothStateReceiver)
         appContext.unregisterReceiver(discoveryStateReceiver)
         appContext.unregisterReceiver(deviceDiscoveryReceiver)
