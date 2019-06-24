@@ -23,6 +23,13 @@
     <string name="action_refresh">Refresh Device List</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Location Permission -->
+    <string name="request_location_title">Needs Location Permission</string>
+    <string name="request_location_message">To discover nearby devices, BluBot needs Location permission. Without the permission, BluBot won\'t be able to find nearby devices.</string>
+    <string name="open_settings">Open Settings</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="package_uri">package:%1$s</string>
+
     <!-- Control Sheet -->
     <string name="minimize_controls">Minimize Controls</string>
     <string name="close_connection">Close Connection</string>
