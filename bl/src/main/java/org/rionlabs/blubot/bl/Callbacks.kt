@@ -1,7 +1,5 @@
 package org.rionlabs.blubot.bl
 
-import android.bluetooth.BluetoothDevice
-
 interface BluetoothStateCallback {
 
     fun onBluetoothStateChanged(current: BluetoothState, previous: BluetoothState)
@@ -14,14 +12,14 @@ interface DiscoveryStateCallback {
 
 interface DeviceDiscoveryCallback {
 
-    fun onDeviceDiscovered(bluetoothDevice: BluetoothDevice)
+    fun onDeviceDiscovered(device: Device)
 }
 
 interface DeviceBondCallback {
 
-    fun onConnectionStarted(bluetoothDevice: BluetoothDevice)
+    fun onConnectionStarted(device: Device)
 
-    fun onConnected(bluetoothDevice: BluetoothDevice)
+    fun onConnected(device: Device)
 
-    fun onConnectionEnded(bluetoothDevice: BluetoothDevice)
+    fun onConnectionEnded(device: Device)
 }

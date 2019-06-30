@@ -1,6 +1,5 @@
 package org.rionlabs.blubot.ui.view
 
-import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.Device
 import org.rionlabs.blubot.bl.DeviceBondCallback
 import org.rionlabs.blubot.databinding.ViewControlSheetBinding
 import org.rionlabs.blubot.service.bluetoothManager
@@ -91,27 +91,27 @@ class ControlSheet @JvmOverloads constructor(
         }
     }
 
-    override fun onConnectionStarted(bluetoothDevice: BluetoothDevice) {
+    override fun onConnectionStarted(device: Device) {
         binding.navigationButton.visibility = View.GONE
         binding.navigationProgressBar.visibility = View.VISIBLE
-        binding.toolbarTitle.text = context.getString(R.string.connecting_to, bluetoothDevice.name)
+        binding.toolbarTitle.text = context.getString(R.string.connecting_to, device.name)
         bluetoothManager.selectedDevice?.apply {
             bottomSheetBehavior.peekHeight = collapsedHeight
         }
     }
 
-    override fun onConnected(bluetoothDevice: BluetoothDevice) {
+    override fun onConnected(device: Device) {
         binding.navigationProgressBar.visibility = View.GONE
         binding.navigationButton.visibility = View.VISIBLE
         binding.closeButton.visibility = View.VISIBLE
-        binding.toolbarTitle.text = context.getString(R.string.connected_to, bluetoothDevice.name)
+        binding.toolbarTitle.text = context.getString(R.string.connected_to, device.name)
         bluetoothManager.selectedDevice?.apply {
             bottomSheetBehavior.peekHeight = collapsedHeight
         }
         // Expand for remote control
     }
 
-    override fun onConnectionEnded(bluetoothDevice: BluetoothDevice) {
+    override fun onConnectionEnded(device: Device) {
         binding.apply {
             navigationProgressBar.visibility = GONE
             navigationButton.visibility = GONE

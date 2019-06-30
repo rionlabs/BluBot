@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import timber.log.Timber
-import android.bluetooth.BluetoothManager as SystemBluetoothManager
 
 class BluetoothManager(private val appContext: Context) {
 
@@ -99,7 +98,7 @@ class BluetoothManager(private val appContext: Context) {
                     // Add the name and address to an array mDeviceAdapter to show in a ListView
                     if (device != null) {
                         for (deviceDiscoveryCallback in deviceDiscoveryCallbackList) {
-                            deviceDiscoveryCallback.onDeviceDiscovered(device)
+                            deviceDiscoveryCallback.onDeviceDiscovered(device.dataItem())
                         }
                         Timber.i("Discovered ${device.address}-${device.name}")
                     }
@@ -122,18 +121,18 @@ class BluetoothManager(private val appContext: Context) {
                     BluetoothDevice.BOND_BONDED -> {
                         selectedDevice = device
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnected(device)
+                            deviceBondCallback.onConnected(device.dataItem())
                         }
                     }
                     BluetoothDevice.BOND_BONDING -> {
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnectionStarted(device)
+                            deviceBondCallback.onConnectionStarted(device.dataItem())
                         }
                     }
                     BluetoothDevice.BOND_NONE -> {
                         selectedDevice = null
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnectionEnded(device)
+                            deviceBondCallback.onConnectionEnded(device.dataItem())
                         }
                     }
                 }
@@ -187,7 +186,7 @@ class BluetoothManager(private val appContext: Context) {
         } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
             selectedDevice = bluetoothDevice
             for (deviceBondCallback in deviceBondCallbackList) {
-                deviceBondCallback.onConnected(bluetoothDevice)
+                deviceBondCallback.onConnected(bluetoothDevice.dataItem())
             }
         }
     }
@@ -206,7 +205,7 @@ class BluetoothManager(private val appContext: Context) {
     fun startDiscovery(): Boolean {
         val bondedDevices = bluetoothAdapter?.bondedDevices ?: mutableSetOf()
         for (bondedDevice in bondedDevices) {
-            deviceDiscoveryCallbackList.forEach { it.onDeviceDiscovered(bondedDevice) }
+            deviceDiscoveryCallbackList.forEach { it.onDeviceDiscovered(bondedDevice.dataItem()) }
         }
 
         return bluetoothAdapter?.startDiscovery() ?: false

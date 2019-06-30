@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.Device
 import org.rionlabs.blubot.bl.DeviceBondCallback
 import org.rionlabs.blubot.bl.DeviceDiscoveryCallback
 import org.rionlabs.blubot.bl.DiscoveryStateCallback
@@ -28,7 +29,6 @@ import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.service.bluetoothManager
 import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
-import org.rionlabs.blubot.util.dataItem
 
 class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
     DiscoveryStateCallback, DeviceDiscoveryCallback, DeviceBondCallback {
@@ -128,19 +128,19 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
         inDiscovery = isDiscovering
     }
 
-    override fun onDeviceDiscovered(bluetoothDevice: BluetoothDevice) {
-        deviceAdapter.addItem(bluetoothDevice.dataItem())
+    override fun onDeviceDiscovered(device: Device) {
+        deviceAdapter.addItem(device)
     }
 
-    override fun onConnectionStarted(bluetoothDevice: BluetoothDevice) {
+    override fun onConnectionStarted(device: Device) {
         // TODO To change body of created functions
     }
 
-    override fun onConnected(bluetoothDevice: BluetoothDevice) {
+    override fun onConnected(device: Device) {
         deviceAdapter.notifyDataSetChanged()
     }
 
-    override fun onConnectionEnded(bluetoothDevice: BluetoothDevice) {
+    override fun onConnectionEnded(device: Device) {
         deviceAdapter.notifyDataSetChanged()
     }
 
