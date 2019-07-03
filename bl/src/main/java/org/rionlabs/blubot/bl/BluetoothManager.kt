@@ -6,6 +6,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import org.rionlabs.blubot.bl.callback.BluetoothStateCallback
+import org.rionlabs.blubot.bl.callback.DeviceBondCallback
+import org.rionlabs.blubot.bl.callback.DeviceDiscoveryCallback
+import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
 import timber.log.Timber
 
 class BluetoothManager(private val appContext: Context) {

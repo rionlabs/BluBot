@@ -8,13 +8,15 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.BluetoothState
-import org.rionlabs.blubot.bl.BluetoothStateCallback
-import org.rionlabs.blubot.bl.DiscoveryStateCallback
+import org.rionlabs.blubot.bl.callback.BluetoothStateCallback
+import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
 import org.rionlabs.blubot.service.bluetoothManager
 import timber.log.Timber
 
-class ConnectionActivity : AppCompatActivity(), BluetoothStateCallback, DiscoveryStateCallback {
+class ConnectionActivity : AppCompatActivity(),
+    BluetoothStateCallback,
+    DiscoveryStateCallback {
 
     private lateinit var binding: ActivityConnectionBinding
     private lateinit var navController: NavController

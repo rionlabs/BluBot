@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.Device
-import org.rionlabs.blubot.bl.DeviceBondCallback
+import org.rionlabs.blubot.bl.callback.DeviceBondCallback
 import org.rionlabs.blubot.databinding.ViewControlSheetBinding
 import org.rionlabs.blubot.service.bluetoothManager
 

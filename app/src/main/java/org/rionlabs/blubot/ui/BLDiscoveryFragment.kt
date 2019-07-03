@@ -22,16 +22,18 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.Device
-import org.rionlabs.blubot.bl.DeviceBondCallback
-import org.rionlabs.blubot.bl.DeviceDiscoveryCallback
-import org.rionlabs.blubot.bl.DiscoveryStateCallback
+import org.rionlabs.blubot.bl.callback.DeviceBondCallback
+import org.rionlabs.blubot.bl.callback.DeviceDiscoveryCallback
+import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.service.bluetoothManager
 import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 
 class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
-    DiscoveryStateCallback, DeviceDiscoveryCallback, DeviceBondCallback {
+    DiscoveryStateCallback,
+    DeviceDiscoveryCallback,
+    DeviceBondCallback {
 
     private lateinit var binding: FragmentBlDiscoveryBinding
 
