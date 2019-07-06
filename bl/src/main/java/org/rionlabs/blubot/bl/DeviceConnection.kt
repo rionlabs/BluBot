@@ -94,4 +94,10 @@ class DeviceConnection(device: BluetoothDevice) {
         private const val SERVER_UUID = "00001101-0000-1000-8000-00805F9B34FB"
         private const val DELAY: Long = 3000
     }
+
+    enum class State {
+        CONNECTED,
+        CONNECTING,
+        NONE
+    }
 }
