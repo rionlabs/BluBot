@@ -45,7 +45,7 @@ class DeviceItemDecoration(context: Context) :
         for (i in 0 until childCount) {
             val child = parent.getChildAt(i)
             parent.getDecoratedBoundsWithMargins(child, bounds)
-            val bottom = bounds.bottom + Math.round(child.translationY)
+            val bottom = bounds.bottom + child.translationY.roundToInt()
             val top = bottom - drawable.intrinsicHeight
 
             drawable.setBounds(left, top, right, bottom)

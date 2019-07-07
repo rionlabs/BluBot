@@ -1,6 +1,6 @@
 <resources>
     <!-- Base Dimensions -->
-    <dimen name="space_zero">1dp</dimen>
+    <dimen name="space_one_dp">1dp</dimen>
     <dimen name="space_micro">2dp</dimen>
     <dimen name="space_mini">4dp</dimen>
     <dimen name="space_small">8dp</dimen>
