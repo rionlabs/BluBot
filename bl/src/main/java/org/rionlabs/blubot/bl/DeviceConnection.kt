@@ -8,86 +8,86 @@ import java.util.*
 
 class DeviceConnection(device: BluetoothDevice) {
 
-    private val isValid: Boolean
-        get() = false
+    private var _state: State
 
-    private var mConnectThread: ConnectThread
+    private var connectThread: ConnectThread
 
-    private var mSocket: BluetoothSocket? = null
+    private var bluetoothSocket: BluetoothSocket? = null
+
+    /**
+     * Defines connection state of [DeviceConnection]
+     */
+    val connectionState: State
+        get() = _state
 
     init {
-        mConnectThread = ConnectThread(device).also {
+        _state = State.NONE
+        connectThread = ConnectThread(device).also {
             it.start()
         }
     }
 
-    fun sendSignal(signal: String) {
-        mSocket?.let {
+    fun sendSignal(signal: String): Boolean {
+        return bluetoothSocket?.let {
             runCatching {
                 it.outputStream.apply {
                     write(signal.toByteArray())
                     flush()
                 }
-            }.onFailure {
+                true
+            }.getOrElse {
                 Timber.e(it, "Failed to write signal")
+                false
             }
-        }
+        } ?: false
     }
 
-    fun setSocket(socket: BluetoothSocket?) {
-        mSocket = socket
-    }
-
-    private inner class ConnectThread(device: BluetoothDevice) : Thread() {
-
-        private val mmSocket: BluetoothSocket? = runCatching {
-            // Get a BluetoothSocket to connect with the given BluetoothDevice.
-            device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
-        }.onFailure {
-            Timber.e(it, "Socket's create() method failed")
-        }.getOrNull()
+    private inner class ConnectThread(val device: BluetoothDevice) : Thread() {
 
         override fun run() {
-            try {
-                sleep(DELAY)
-            } catch (ignored: InterruptedException) {
-            }
+            // Change ConnectionState
+            _state = DeviceConnection.State.CONNECTING
+
+            // Delay is added to waiting discovery to finish
+            runCatching { sleep(DELAY) }
+
+            bluetoothSocket = runCatching {
+                // Get a BluetoothSocket to connect with the given BluetoothDevice.
+                device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
+            }.onFailure {
+                Timber.e(it, "Socket's create() method failed")
+                _state = DeviceConnection.State.ERROR
+                return
+            }.getOrNull()
 
             try {
                 // Connect to the remote device through the socket.
-                mmSocket?.connect()
-                Timber.d("run: Socket connected ${if (mmSocket?.isConnected == true) "true" else "false"}")
+                bluetoothSocket?.connect()
+                Timber.d("run: Socket connected ${if (bluetoothSocket?.isConnected == true) "true" else "false"}")
+                // Socket opened, change ConnectionState
+                _state = DeviceConnection.State.CONNECTED
+
             } catch (connectException: IOException) {
                 // Unable to connect; close the socket and return.
                 Timber.e(connectException, "run: ConnectException ")
                 try {
-                    mmSocket?.close()
+                    bluetoothSocket?.close()
                 } catch (closeException: IOException) {
                     Timber.e(closeException, "Could not close the client socket")
                 }
+                // Error, change ConnectionState
+                _state = DeviceConnection.State.ERROR
                 return
             }
-
-            // The connection attempt succeeded. Perform work associated with
-            // the connection in a separate thread.
-            setSocket(mmSocket)
-        }
-
-        /**
-         * Closes the client socket and causes the thread to finish.
-         */
-        fun cancel() {
-            try {
-                mmSocket?.close()
-            } catch (e: IOException) {
-                Timber.e(e, "Could not close the client socket")
-            }
-
         }
     }
 
-    fun destroy() {
-        mConnectThread.cancel()
+    /**
+     * Closes this connection.
+     */
+    fun close() {
+        connectThread.destroy()
+        _state = State.NONE
     }
 
     companion object {
@@ -98,6 +98,7 @@ class DeviceConnection(device: BluetoothDevice) {
     enum class State {
         CONNECTED,
         CONNECTING,
-        NONE
+        NONE,
+        ERROR
     }
 }
