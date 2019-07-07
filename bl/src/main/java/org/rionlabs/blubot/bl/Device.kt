@@ -49,7 +49,9 @@ data class Device(
         else -> R.drawable.device_class_unknown_device
     }
 
-    val connected: Boolean = bluetoothDevice.bondState == BOND_BONDED
+    val connected: Boolean = false
+
+    val isPaired: Boolean = bluetoothDevice.bondState == BOND_BONDED
 
     companion object {
         const val PERIPHERAL_KEYBOARD = 0x0540
