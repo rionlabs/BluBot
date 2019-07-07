@@ -6,20 +6,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import org.rionlabs.blubot.bl.callback.BluetoothStateCallback
-import org.rionlabs.blubot.bl.callback.DeviceBondCallback
-import org.rionlabs.blubot.bl.callback.DeviceDiscoveryCallback
-import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
+import org.rionlabs.blubot.bl.callback.CallbackManager
 import timber.log.Timber
 
-class BluetoothManager(private val appContext: Context) {
+class BluetoothManager(private val appContext: Context) : CallbackManager() {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
-
-    private val bluetoothStateCallbackList = mutableListOf<BluetoothStateCallback>()
-    private val discoveryStateCallbackList = mutableListOf<DiscoveryStateCallback>()
-    private val deviceDiscoveryCallbackList = mutableListOf<DeviceDiscoveryCallback>()
-    private val deviceBondCallbackList = mutableListOf<DeviceBondCallback>()
 
     private val connectionMap = mutableMapOf<BluetoothDevice, DeviceConnection>()
 
@@ -147,38 +139,6 @@ class BluetoothManager(private val appContext: Context) {
     init {
         // Initialise Bluetooth Adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-    }
-
-    fun addBluetoothStateCallback(stateCallback: BluetoothStateCallback) {
-        bluetoothStateCallbackList.add(stateCallback)
-    }
-
-    fun removeBluetoothStateCallback(stateCallback: BluetoothStateCallback) {
-        bluetoothStateCallbackList.remove(stateCallback)
-    }
-
-    fun addDiscoveryStateCallback(stateCallback: DiscoveryStateCallback) {
-        discoveryStateCallbackList.add(stateCallback)
-    }
-
-    fun removeDiscoveryStateCallback(stateCallback: DiscoveryStateCallback) {
-        discoveryStateCallbackList.remove(stateCallback)
-    }
-
-    fun addDeviceDiscoveryCallback(deviceCallback: DeviceDiscoveryCallback) {
-        deviceDiscoveryCallbackList.add(deviceCallback)
-    }
-
-    fun removeDeviceDiscoveryCallback(deviceCallback: DeviceDiscoveryCallback) {
-        deviceDiscoveryCallbackList.remove(deviceCallback)
-    }
-
-    fun addDeviceBondCallback(deviceBondCallback: DeviceBondCallback) {
-        deviceBondCallbackList.add(deviceBondCallback)
-    }
-
-    fun removeDeviceBondCallback(deviceBondCallback: DeviceBondCallback) {
-        deviceBondCallbackList.remove(deviceBondCallback)
     }
 
     fun startConnectionTo(bluetoothDevice: BluetoothDevice) {
