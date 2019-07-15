@@ -29,7 +29,7 @@ class ConnectionActivity : AppCompatActivity(),
         bluetoothManager.addBluetoothStateCallback(this)
         bluetoothManager.addDiscoveryStateCallback(this)
 
-        if (!bluetoothManager.isBluetoothEnable) {
+        if (!bluetoothManager.isBluetoothEnabled) {
             binding.refreshButton.visibility = INVISIBLE
             navController.navigate(R.id.enableBluetooth)
         } else {

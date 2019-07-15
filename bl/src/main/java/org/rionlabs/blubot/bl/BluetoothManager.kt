@@ -15,18 +15,32 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
 
     private val connectionMap = mutableMapOf<BluetoothDevice, DeviceConnection>()
 
+    /**
+     * True if the current device supports Bluetooth.
+     * Doesn't rely on [registerListeners] or [unregisterReceivers].
+     */
     val isBluetoothAvailable: Boolean
         get() {
             return bluetoothAdapter != null
         }
 
-    val isBluetoothEnable: Boolean
+    /**
+     * True if bluetooth is enabled.
+     * Doesn't rely on [registerListeners] or [unregisterReceivers].
+     */
+    val isBluetoothEnabled: Boolean
         get() {
             return bluetoothAdapter?.isEnabled ?: false
         }
 
+    /**
+     * True if the [BluetoothManager] instance is discovering new devices.
+     */
     var isInDiscovery: Boolean = false
 
+    /**
+     * Selected device.
+     */
     var selectedDevice: BluetoothDevice? = null
 
     private val mBluetoothStateReceiver = object : BroadcastReceiver() {
@@ -141,6 +155,26 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     }
 
+    /**
+     * Registers [BroadcastReceiver]s for listening bluetooth events. Most of the methods depend of this method.
+     * Need to call [unregisterReceivers] to clear the receivers.
+     */
+    fun registerListeners() {
+        val bluetoothStateFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        appContext.registerReceiver(mBluetoothStateReceiver, bluetoothStateFilter)
+
+        val discoveryStateFilter = IntentFilter()
+        discoveryStateFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        discoveryStateFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        appContext.registerReceiver(discoveryStateReceiver, discoveryStateFilter)
+
+        val deviceDiscoveryFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        appContext.registerReceiver(deviceDiscoveryReceiver, deviceDiscoveryFilter)
+
+        val bondStateFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        appContext.registerReceiver(bondStateReceiver, bondStateFilter)
+    }
+
     fun startConnectionTo(bluetoothDevice: BluetoothDevice) {
         // Cancel discovery to make connection faster
         bluetoothAdapter?.cancelDiscovery()
@@ -175,23 +209,10 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         return bluetoothAdapter?.startDiscovery() ?: false
     }
 
-    fun start() {
-        val bluetoothStateFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
-        appContext.registerReceiver(mBluetoothStateReceiver, bluetoothStateFilter)
-
-        val discoveryStateFilter = IntentFilter()
-        discoveryStateFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        discoveryStateFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        appContext.registerReceiver(discoveryStateReceiver, discoveryStateFilter)
-
-        val deviceDiscoveryFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        appContext.registerReceiver(deviceDiscoveryReceiver, deviceDiscoveryFilter)
-
-        val bondStateFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
-        appContext.registerReceiver(bondStateReceiver, bondStateFilter)
-    }
-
-    fun stop() {
+    /**
+     * Unregisters the receivers. No callback will work after this method called.
+     */
+    fun unregisterReceivers() {
         appContext.unregisterReceiver(mBluetoothStateReceiver)
         appContext.unregisterReceiver(discoveryStateReceiver)
         appContext.unregisterReceiver(deviceDiscoveryReceiver)

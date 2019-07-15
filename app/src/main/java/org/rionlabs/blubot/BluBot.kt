@@ -20,12 +20,12 @@ class BluBot : Application() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : LifecycleObserver {
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun onStart() {
-                bluetoothManager.start()
+                bluetoothManager.registerListeners()
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
             fun onStop() {
-                bluetoothManager.stop()
+                bluetoothManager.unregisterReceivers()
             }
         })
 
