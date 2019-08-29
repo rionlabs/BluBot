@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import org.rionlabs.blubot.R
@@ -19,11 +20,13 @@ class ConnectionActivity : AppCompatActivity(),
     DiscoveryStateCallback {
 
     private lateinit var binding: ActivityConnectionBinding
+    private lateinit var viewModel: ConnectionViewModel
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_connection)
+        viewModel = ViewModelProviders.of(this).get(ConnectionViewModel::class.java)
         navController = findNavController(R.id.connection_navigation_host)
 
         bluetoothManager.addBluetoothStateCallback(this)
