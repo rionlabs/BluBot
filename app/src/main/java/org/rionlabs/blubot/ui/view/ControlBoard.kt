@@ -25,7 +25,7 @@ class ControlBoard @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         binding.apply {
-            // Should be exact math with enum Button values
+            // Should be exact match with enum Button values
             arrayOf(
                 buttonA,
                 buttonB,
@@ -61,6 +61,7 @@ class ControlBoard @JvmOverloads constructor(
         fun onButtonClicked(button: Button)
     }
 
+    @Suppress("unused")
     enum class Button(val signal: String) {
         A("0x0A"),
         B("0x0B"),
