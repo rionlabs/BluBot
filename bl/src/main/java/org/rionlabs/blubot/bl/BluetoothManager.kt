@@ -131,18 +131,18 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
                     BluetoothDevice.BOND_BONDED -> {
                         selectedDevice = device
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnected(device.dataItem())
+                            deviceBondCallback.onBonded(device.dataItem())
                         }
                     }
                     BluetoothDevice.BOND_BONDING -> {
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnectionStarted(device.dataItem())
+                            deviceBondCallback.onBondStarted(device.dataItem())
                         }
                     }
                     BluetoothDevice.BOND_NONE -> {
                         selectedDevice = null
                         for (deviceBondCallback in deviceBondCallbackList) {
-                            deviceBondCallback.onConnectionEnded(device.dataItem())
+                            deviceBondCallback.onBondEnded(device.dataItem())
                         }
                     }
                 }
@@ -184,7 +184,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
             selectedDevice = bluetoothDevice
             for (deviceBondCallback in deviceBondCallbackList) {
-                deviceBondCallback.onConnected(bluetoothDevice.dataItem())
+                deviceBondCallback.onBonded(bluetoothDevice.dataItem())
             }
         }
     }

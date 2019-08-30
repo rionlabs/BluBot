@@ -91,7 +91,7 @@ class ControlSheet @JvmOverloads constructor(
         }
     }
 
-    override fun onConnectionStarted(device: Device) {
+    override fun onBondStarted(device: Device) {
         binding.navigationButton.visibility = View.GONE
         binding.navigationProgressBar.visibility = View.VISIBLE
         binding.toolbarTitle.text = context.getString(R.string.connecting_to, device.name)
@@ -100,7 +100,7 @@ class ControlSheet @JvmOverloads constructor(
         }
     }
 
-    override fun onConnected(device: Device) {
+    override fun onBonded(device: Device) {
         binding.navigationProgressBar.visibility = View.GONE
         binding.navigationButton.visibility = View.VISIBLE
         binding.closeButton.visibility = View.VISIBLE
@@ -111,7 +111,7 @@ class ControlSheet @JvmOverloads constructor(
         // Expand for remote control
     }
 
-    override fun onConnectionEnded(device: Device) {
+    override fun onBondEnded(device: Device) {
         binding.apply {
             navigationProgressBar.visibility = GONE
             navigationButton.visibility = GONE

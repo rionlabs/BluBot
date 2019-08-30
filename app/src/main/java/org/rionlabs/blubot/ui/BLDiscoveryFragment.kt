@@ -134,15 +134,15 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
         deviceAdapter.addItem(device)
     }
 
-    override fun onConnectionStarted(device: Device) {
+    override fun onBondStarted(device: Device) {
         // TODO To change body of created functions
     }
 
-    override fun onConnected(device: Device) {
+    override fun onBonded(device: Device) {
         deviceAdapter.notifyDataSetChanged()
     }
 
-    override fun onConnectionEnded(device: Device) {
+    override fun onBondEnded(device: Device) {
         deviceAdapter.notifyDataSetChanged()
     }
 

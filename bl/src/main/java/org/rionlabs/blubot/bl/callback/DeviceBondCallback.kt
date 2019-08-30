@@ -4,9 +4,9 @@ import org.rionlabs.blubot.bl.Device
 
 interface DeviceBondCallback {
 
-    fun onConnectionStarted(device: Device)
+    fun onBondStarted(device: Device)
 
-    fun onConnected(device: Device)
+    fun onBonded(device: Device)
 
-    fun onConnectionEnded(device: Device)
+    fun onBondEnded(device: Device)
 }
