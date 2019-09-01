@@ -19,11 +19,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.rionlabs.blubot.R
-import org.rionlabs.blubot.bl.Device
-import org.rionlabs.blubot.bl.callback.DeviceBondCallback
-import org.rionlabs.blubot.bl.callback.DeviceDiscoveryCallback
 import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
 import org.rionlabs.blubot.service.bluetoothManager
@@ -31,11 +30,11 @@ import org.rionlabs.blubot.service.requireBluetoothManager
 import org.rionlabs.blubot.ui.view.DeviceItemDecoration
 
 class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
-    DiscoveryStateCallback,
-    DeviceDiscoveryCallback,
-    DeviceBondCallback {
+    DiscoveryStateCallback {
 
     private lateinit var binding: FragmentBlDiscoveryBinding
+
+    private lateinit var viewModel: ConnectionViewModel
 
     private val deviceAdapter = DeviceAdapter(this)
 
@@ -60,6 +59,11 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
                 toggleNoPermissionView()
             }
             .create()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(requireActivity()).get(ConnectionViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -92,9 +96,12 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
 
     override fun onStart() {
         super.onStart()
-        requireBluetoothManager().addDeviceDiscoveryCallback(this)
         requireBluetoothManager().addDiscoveryStateCallback(this)
-        requireBluetoothManager().addDeviceBondCallback(this)
+
+        viewModel.deviceListData.observe(viewLifecycleOwner, Observer {
+            val deviceList = it.toMutableList()
+            deviceAdapter.submitList(deviceList)
+        })
 
         if (isLocationPermissionGranted) {
             // Permission has already been granted
@@ -130,22 +137,6 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
         inDiscovery = isDiscovering
     }
 
-    override fun onDeviceDiscovered(device: Device) {
-        deviceAdapter.addItem(device)
-    }
-
-    override fun onBondStarted(device: Device) {
-        // TODO To change body of created functions
-    }
-
-    override fun onBonded(device: Device) {
-        deviceAdapter.notifyDataSetChanged()
-    }
-
-    override fun onBondEnded(device: Device) {
-        deviceAdapter.notifyDataSetChanged()
-    }
-
     private fun discoverDevices() {
         // Make the list visible
         toggleNoPermissionView()
@@ -168,8 +159,6 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
     override fun onStop() {
         super.onStop()
         requireBluetoothManager().removeDiscoveryStateCallback(this)
-        requireBluetoothManager().removeDeviceDiscoveryCallback(this)
-        requireBluetoothManager().removeDeviceBondCallback(this)
 
         permissionRequiredDialog.apply {
             if (isShowing)

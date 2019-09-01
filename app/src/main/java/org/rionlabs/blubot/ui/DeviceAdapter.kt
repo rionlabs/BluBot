@@ -28,9 +28,8 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
         super.submitList(list?.distinct())
     }
 
-    fun addItem(vararg device: Device) {
-        val newList = currentList.toMutableList().apply { addAll(device) }
-        submitList(newList)
+    override fun submitList(list: MutableList<Device>?, commitCallback: Runnable?) {
+        super.submitList(list?.distinct(), commitCallback)
     }
 
     class DeviceViewHolder(private val binding: ItemBinding) :
