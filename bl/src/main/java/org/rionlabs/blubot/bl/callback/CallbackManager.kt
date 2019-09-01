@@ -44,11 +44,11 @@ abstract class CallbackManager {
         deviceBondCallbackList.remove(deviceBondCallback)
     }
 
-    fun addDeviceConnectionCallback(deviceBondCallback: DeviceConnectionCallback) {
-        deviceConnectionCallbackList.add(deviceBondCallback)
+    fun addDeviceConnectionCallback(deviceConnectionCallback: DeviceConnectionCallback) {
+        deviceConnectionCallbackList.add(deviceConnectionCallback)
     }
 
-    fun removeDeviceConnectionCallback(deviceBondCallback: DeviceConnectionCallback) {
-        deviceConnectionCallbackList.remove(deviceBondCallback)
+    fun removeDeviceConnectionCallback(deviceConnectionCallback: DeviceConnectionCallback) {
+        deviceConnectionCallbackList.remove(deviceConnectionCallback)
     }
 }
