@@ -4,34 +4,59 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.rionlabs.blubot.bl.BluetoothState
 import org.rionlabs.blubot.bl.Device
-import org.rionlabs.blubot.bl.callback.DeviceBondCallback
-import org.rionlabs.blubot.bl.callback.DeviceConnectionCallback
-import org.rionlabs.blubot.bl.callback.DeviceDiscoveryCallback
-import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
+import org.rionlabs.blubot.bl.callback.*
 import org.rionlabs.blubot.service.bluetoothManager
 
-class ConnectionViewModel(app: Application) : AndroidViewModel(app), DeviceDiscoveryCallback,
+class ConnectionViewModel(app: Application) : AndroidViewModel(app), BluetoothStateCallback,
+    DeviceDiscoveryCallback,
     DiscoveryStateCallback, DeviceBondCallback, DeviceConnectionCallback {
+
+    private val _bluetoothState = MutableLiveData<BluetoothState>()
+    val bluetoothStateData: LiveData<BluetoothState>
+        get() = _bluetoothState
 
     private val _deviceList = MutableLiveData<List<Device>>()
     val deviceListData: LiveData<List<Device>>
         get() = _deviceList
 
+    private val _isDiscovering = MutableLiveData<Boolean>()
+    val isDiscoveringData: LiveData<Boolean>
+        get() = _isDiscovering
+
     init {
-        // Link BL Manager with system
-        bluetoothManager.registerListeners()
-        // Start listening to callbacks
-        bluetoothManager.addDeviceDiscoveryCallback(this)
-        bluetoothManager.addDiscoveryStateCallback(this)
-        bluetoothManager.addDeviceBondCallback(this)
-        bluetoothManager.addDeviceConnectionCallback(this)
+        bluetoothManager.let {
+            // Link BL Manager with system
+            it.registerListeners()
+            // Start listening to callbacks
+            it.addBluetoothStateCallback(this)
+            it.addDeviceDiscoveryCallback(this)
+            it.addDiscoveryStateCallback(this)
+            it.addDeviceBondCallback(this)
+            it.addDeviceConnectionCallback(this)
+        }
+
+        if (bluetoothManager.isBluetoothEnabled) {
+            _bluetoothState.postValue(BluetoothState.ON)
+        } else {
+            _bluetoothState.postValue(BluetoothState.OFF)
+        }
+
+        _isDiscovering.postValue(bluetoothManager.isInDiscovery)
     }
 
     // region BluetoothManager Callbacks
 
+    override fun onBluetoothStateChanged(current: BluetoothState, previous: BluetoothState) {
+        _bluetoothState.postValue(current)
+    }
+
     override fun onDiscoveryStateChanged(isDiscovering: Boolean) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (isDiscovering) {
+            _deviceList.postValue(mutableListOf())
+        }
+        _isDiscovering.postValue(isDiscovering)
     }
 
     override fun onDeviceDiscovered(device: Device) {
@@ -72,13 +97,21 @@ class ConnectionViewModel(app: Application) : AndroidViewModel(app), DeviceDisco
         deviceList.add(newDevice)
     }
 
+    fun refreshDevices(): Boolean {
+        return bluetoothManager.startDiscovery()
+    }
+
     override fun onCleared() {
-        // Clear callbacks
-        bluetoothManager.removeDiscoveryStateCallback(this)
-        bluetoothManager.removeDeviceDiscoveryCallback(this)
-        bluetoothManager.removeDeviceBondCallback(this)
-        bluetoothManager.removeDeviceConnectionCallback(this)
-        // Clean up BL Manager
-        bluetoothManager.unregisterReceivers()
+        bluetoothManager.let {
+            // Clear callbacks
+            it.removeBluetoothStateCallback(this)
+            it.removeDiscoveryStateCallback(this)
+            it.removeDeviceDiscoveryCallback(this)
+            it.removeDeviceBondCallback(this)
+            it.removeDeviceConnectionCallback(this)
+            // Clean up BL Manager
+            it.unregisterReceivers()
+        }
+
     }
 }
