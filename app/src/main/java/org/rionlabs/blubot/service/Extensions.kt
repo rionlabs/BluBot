@@ -1,14 +1,10 @@
 package org.rionlabs.blubot.service
 
-import android.app.Activity
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import org.rionlabs.blubot.BluBot
 import org.rionlabs.blubot.bl.BluetoothManager
-
-val Activity.bluetoothManager: BluetoothManager
-    get() = (application as BluBot).bluetoothManager
 
 val AndroidViewModel.bluetoothManager: BluetoothManager
     get() = getApplication<BluBot>().bluetoothManager
