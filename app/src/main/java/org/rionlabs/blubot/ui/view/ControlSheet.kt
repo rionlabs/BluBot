@@ -59,6 +59,13 @@ class ControlSheet @JvmOverloads constructor(
 
             binding.apply {
                 navigationButton.setOnClickListener { changeState() }
+                closeButton.setOnClickListener {
+                    bluetoothManager.apply {
+                        selectedDevice?.let {
+                            closeConnection(it)
+                        }
+                    }
+                }
             }
 
             binding.controlBoard.setOnButtonClickListener {

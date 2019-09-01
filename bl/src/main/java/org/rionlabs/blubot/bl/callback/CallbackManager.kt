@@ -10,6 +10,8 @@ abstract class CallbackManager {
 
     protected val deviceBondCallbackList = mutableListOf<DeviceBondCallback>()
 
+    protected val deviceConnectionCallbackList = mutableListOf<DeviceConnectionCallback>()
+
     fun addBluetoothStateCallback(stateCallback: BluetoothStateCallback) {
         bluetoothStateCallbackList.add(stateCallback)
     }
@@ -40,5 +42,13 @@ abstract class CallbackManager {
 
     fun removeDeviceBondCallback(deviceBondCallback: DeviceBondCallback) {
         deviceBondCallbackList.remove(deviceBondCallback)
+    }
+
+    fun addDeviceConnectionCallback(deviceBondCallback: DeviceConnectionCallback) {
+        deviceConnectionCallbackList.add(deviceBondCallback)
+    }
+
+    fun removeDeviceConnectionCallback(deviceBondCallback: DeviceConnectionCallback) {
+        deviceConnectionCallbackList.remove(deviceBondCallback)
     }
 }

@@ -43,6 +43,8 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
      */
     var selectedDevice: BluetoothDevice? = null
 
+    // region Bluetooth Receivers
+
     private val mBluetoothStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (BluetoothAdapter.ACTION_STATE_CHANGED == intent.action) {
@@ -150,6 +152,8 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         }
     }
 
+    // endregion
+
     init {
         // Initialise Bluetooth Adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -175,16 +179,27 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         appContext.registerReceiver(bondStateReceiver, bondStateFilter)
     }
 
+    // region Connection Methods
+
     fun startConnectionTo(bluetoothDevice: BluetoothDevice) {
         // Cancel discovery to make connection faster
         bluetoothAdapter?.cancelDiscovery()
 
         if (bluetoothDevice.bondState == BluetoothDevice.BOND_NONE) {
-            bluetoothDevice.createBond()
-        } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
             selectedDevice = bluetoothDevice
+            bluetoothDevice.createBond()
+            for (deviceBondCallback in deviceBondCallbackList) {
+                deviceBondCallback.onBondStarted(bluetoothDevice.dataItem())
+            }
+        } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
             for (deviceBondCallback in deviceBondCallbackList) {
                 deviceBondCallback.onBonded(bluetoothDevice.dataItem())
+            }
+            // If already bonded, then start connection
+            val connection = DeviceConnection(bluetoothDevice)
+            connection.connect()
+            for (connectionCallback in deviceConnectionCallbackList) {
+                connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem())
             }
         }
     }
@@ -197,8 +212,14 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         }
     }
 
+    fun closeConnection(device: BluetoothDevice) {
+        connectionMap[device]?.close()
+    }
+
+    //endregion
+
     /**
-     * Needs BLUETOOTH_ADMIN permission
+     * Needs [android.Manifest.permission.BLUETOOTH_ADMIN] permission
      */
     fun startDiscovery(): Boolean {
         val bondedDevices = bluetoothAdapter?.bondedDevices ?: mutableSetOf()

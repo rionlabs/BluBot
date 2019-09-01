@@ -6,11 +6,9 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.*
 
-class DeviceConnection(device: BluetoothDevice) {
+class DeviceConnection(val device: BluetoothDevice) {
 
     private var _state: State
-
-    private var connectThread: ConnectThread
 
     private var bluetoothSocket: BluetoothSocket? = null
 
@@ -22,9 +20,6 @@ class DeviceConnection(device: BluetoothDevice) {
 
     init {
         _state = State.NONE
-        connectThread = ConnectThread(device).also {
-            it.start()
-        }
     }
 
     fun sendSignal(signal: String): Boolean {
@@ -42,43 +37,41 @@ class DeviceConnection(device: BluetoothDevice) {
         } ?: false
     }
 
-    private inner class ConnectThread(val device: BluetoothDevice) : Thread() {
+    fun connect(): Boolean {
+        // Change ConnectionState
+        _state = State.CONNECTING
 
-        override fun run() {
-            // Change ConnectionState
-            _state = DeviceConnection.State.CONNECTING
+        // Delay is added to waiting discovery to finish
+        runCatching { Thread.sleep(DELAY) }
 
-            // Delay is added to waiting discovery to finish
-            runCatching { sleep(DELAY) }
+        bluetoothSocket = runCatching {
+            // Get a BluetoothSocket to connect with the given BluetoothDevice.
+            device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
+        }.onFailure {
+            Timber.e(it, "Socket's create() method failed")
+            _state = State.ERROR
+            return false
+        }.getOrNull()
 
-            bluetoothSocket = runCatching {
-                // Get a BluetoothSocket to connect with the given BluetoothDevice.
-                device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
-            }.onFailure {
-                Timber.e(it, "Socket's create() method failed")
-                _state = DeviceConnection.State.ERROR
-                return
-            }.getOrNull()
+        try {
+            // Connect to the remote device through the socket.
+            bluetoothSocket?.connect()
+            Timber.d("run: Socket connected ${if (bluetoothSocket?.isConnected == true) "true" else "false"}")
+            // Socket opened, change ConnectionState
+            _state = State.CONNECTED
+            return true
 
+        } catch (connectException: IOException) {
+            // Unable to connect; close the socket and return.
+            Timber.e(connectException, "run: ConnectException ")
             try {
-                // Connect to the remote device through the socket.
-                bluetoothSocket?.connect()
-                Timber.d("run: Socket connected ${if (bluetoothSocket?.isConnected == true) "true" else "false"}")
-                // Socket opened, change ConnectionState
-                _state = DeviceConnection.State.CONNECTED
-
-            } catch (connectException: IOException) {
-                // Unable to connect; close the socket and return.
-                Timber.e(connectException, "run: ConnectException ")
-                try {
-                    bluetoothSocket?.close()
-                } catch (closeException: IOException) {
-                    Timber.e(closeException, "Could not close the client socket")
-                }
-                // Error, change ConnectionState
-                _state = DeviceConnection.State.ERROR
-                return
+                bluetoothSocket?.close()
+            } catch (closeException: IOException) {
+                Timber.e(closeException, "Could not close the client socket")
             }
+            // Error, change ConnectionState
+            _state = State.ERROR
+            return false
         }
     }
 
@@ -86,7 +79,13 @@ class DeviceConnection(device: BluetoothDevice) {
      * Closes this connection.
      */
     fun close() {
-        connectThread.destroy()
+        _state = State.CONNECTING
+        runCatching {
+
+            bluetoothSocket?.close()
+        }.onFailure {
+            Timber.e(it, "Error while closing connection to ${bluetoothSocket?.remoteDevice?.name}")
+        }
         _state = State.NONE
     }
 
