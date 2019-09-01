@@ -199,7 +199,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
             val connection = DeviceConnection(bluetoothDevice)
             connection.connect()
             for (connectionCallback in deviceConnectionCallbackList) {
-                connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem())
+                connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem(connected = true))
             }
         }
     }
@@ -214,6 +214,11 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
 
     fun closeConnection(device: BluetoothDevice) {
         connectionMap[device]?.close()
+        for (connectionCallback in deviceConnectionCallbackList) {
+            connectionCallback.onConnectionStateChanged(
+                device.dataItem(connected = false)
+            )
+        }
     }
 
     //endregion

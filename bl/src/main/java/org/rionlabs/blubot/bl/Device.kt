@@ -7,7 +7,8 @@ import android.bluetooth.BluetoothDevice.BOND_BONDED
 data class Device(
     val name: String,
     val ssid: String,
-    val bluetoothDevice: BluetoothDevice
+    val bluetoothDevice: BluetoothDevice,
+    val connected: Boolean = false
 ) {
 
     val deviceTypeIconRes: Int = when (bluetoothDevice.bluetoothClass.majorDeviceClass) {
@@ -48,8 +49,6 @@ data class Device(
 
         else -> R.drawable.device_class_unknown_device
     }
-
-    val connected: Boolean = false
 
     val isPaired: Boolean = bluetoothDevice.bondState == BOND_BONDED
 
