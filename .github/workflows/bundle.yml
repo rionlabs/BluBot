@@ -27,4 +27,4 @@ jobs:
         java-version: 1.8
 
     - name: Bundle with Gradle
-      run: ./gradlew bundleRelease
+      run: ./gradlew --no-daemon bundleRelease
