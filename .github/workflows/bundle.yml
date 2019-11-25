@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,6 +13,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Export Signing Config
+      working-directory: app
       run: |
         echo $KEYSTORE_FILE | base64 --d > BluBot.jks
         echo $SIGNING_PROPERTIES | base64 --d > signing.properties
