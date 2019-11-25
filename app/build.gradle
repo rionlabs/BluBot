@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
+apply from: 'signing.gradle'
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -16,8 +18,13 @@ android {
     }
     dataBinding.enabled = true
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = " Debug"
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
