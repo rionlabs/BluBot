@@ -6,8 +6,8 @@ android {
         release {
             storeFile file(signingProperties.releaseStoreFilePath)
             storePassword signingProperties.releaseStorePassword
-            keyAlias signingProperties.releaseSignKeyAlias
-            keyPassword signingProperties.releaseSignKeyPassword
+            keyAlias signingProperties.releaseSigningKeyAlias
+            keyPassword signingProperties.releaseSigningKeyPassword
         }
     }
 }
