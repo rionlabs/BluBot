@@ -1,6 +1,6 @@
 package org.rionlabs.blubot.ui
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
 import android.content.Intent
@@ -41,10 +41,10 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
     private var inDiscovery: Boolean = false
 
     private val isLocationPermissionGranted: Boolean
-        get() = checkSelfPermission(requireActivity(), ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
+        get() = checkSelfPermission(requireActivity(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
 
     private val canRequestPermission: Boolean
-        get() = shouldShowRequestPermissionRationale(requireActivity(), ACCESS_COARSE_LOCATION)
+        get() = shouldShowRequestPermissionRationale(requireActivity(), ACCESS_FINE_LOCATION)
 
     private val permissionRequiredDialog: AlertDialog
         get() = AlertDialog.Builder(requireContext())
@@ -108,7 +108,7 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
             discoverDevices()
         } else {
             // Permission is not granted
-            if (shouldShowRequestPermissionRationale(requireActivity(), ACCESS_COARSE_LOCATION)) {
+            if (shouldShowRequestPermissionRationale(requireActivity(), ACCESS_FINE_LOCATION)) {
                 // User has previously denied the request
                 permissionRequiredDialog.show()
             } else {
@@ -167,7 +167,7 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
     }
 
     private fun requestLocationPermission() {
-        requestPermissions(arrayOf(ACCESS_COARSE_LOCATION), RC_REQUEST_LOCATION)
+        requestPermissions(arrayOf(ACCESS_FINE_LOCATION), RC_REQUEST_LOCATION)
     }
 
     private fun toggleNoPermissionView() {

@@ -4,6 +4,8 @@
     <!-- Required for Bluetooth -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Required for discovery | FINE is only required above Android 9 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>
