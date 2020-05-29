@@ -214,7 +214,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
             if (connect) {
                 Timber.d("startConnectionTo: connection successful")
                 for (connectionCallback in deviceConnectionCallbackList) {
-                    connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem(connected = true))
+                    connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem())
                 }
             } else {
                 Timber.w("startConnectionTo: connection failure")
@@ -234,7 +234,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         connectionMap[device]?.close()
         for (connectionCallback in deviceConnectionCallbackList) {
             connectionCallback.onConnectionStateChanged(
-                device.dataItem(connected = false)
+                device.dataItem()
             )
         }
     }

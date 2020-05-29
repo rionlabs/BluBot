@@ -10,6 +10,10 @@
 
         <import type="androidx.core.content.ContextCompat" />
 
+        <import type="org.rionlabs.blubot.bl.ConnectionState" />
+
+        <import type="org.rionlabs.blubot.bl.PairingState" />
+
         <variable
             name="device"
             type="org.rionlabs.blubot.bl.Device" />
@@ -28,6 +32,7 @@
             android:contentDescription="@string/cd_bluetooth_device"
             android:padding="@dimen/space_small"
             android:src="@{ContextCompat.getDrawable(context, device.deviceTypeIconRes)}"
+            android:tint="@color/secondaryDarkTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iconBarrier"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,14 +99,24 @@
             android:layout_marginEnd="@dimen/space_normal"
             android:contentDescription="@string/cd_bluetooth_device"
             android:src="@drawable/ic_bluetooth_paired"
-            android:tint="@color/primaryDarkColor"
-            android:visibility="@{device.isPaired ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:tint="@{device.pairingState == PairingState.PAIRED ? @color/primaryDarkColor : @color/indicating_color}"
+            android:visibility="@{device.pairingState != PairingState.PAIRING ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toTopOf="@id/connectedIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/iconBarrierEnd"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
+
+        <ProgressBar
+            android:id="@+id/pairingState"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:indeterminateTint="@color/indicating_color"
+            android:visibility="@{device.pairingState == PairingState.PAIRING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/pairedIcon"
+            app:layout_constraintEnd_toEndOf="@id/pairedIcon"
+            app:layout_constraintStart_toStartOf="@id/pairedIcon"
+            app:layout_constraintTop_toTopOf="@id/pairedIcon" />
 
         <ImageView
             android:id="@+id/connectedIcon"
@@ -111,12 +126,23 @@
             android:layout_marginEnd="@dimen/space_normal"
             android:contentDescription="@string/cd_bluetooth_device"
             android:src="@drawable/ic_connection_link"
-            android:tint="@color/primaryDarkColor"
-            android:visibility="@{device.connected ? View.VISIBLE : View.GONE}"
+            android:tint="@{device.connectionState == ConnectionState.CONNECTED ? @color/primaryDarkColor : @color/indicating_color}"
+            android:visibility="@{device.connectionState != ConnectionState.CONNECTING ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/iconBarrierEnd"
             app:layout_constraintTop_toBottomOf="@id/pairedIcon" />
+
+        <ProgressBar
+            android:id="@+id/connectionState"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:indeterminateTint="@color/indicating_color"
+            android:visibility="@{device.connectionState == ConnectionState.CONNECTING ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/connectedIcon"
+            app:layout_constraintEnd_toEndOf="@id/connectedIcon"
+            app:layout_constraintStart_toStartOf="@id/connectedIcon"
+            app:layout_constraintTop_toTopOf="@id/connectedIcon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

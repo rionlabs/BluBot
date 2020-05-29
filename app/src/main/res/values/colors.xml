@@ -23,4 +23,5 @@
     <!-- Individual Colors -->
     <color name="ic_launcher_background">@color/primaryColor</color>
     <color name="launch_background">@android:color/white</color>
+    <color name="indicating_color">@color/divider</color>
 </resources>

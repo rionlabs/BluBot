@@ -2,13 +2,13 @@ package org.rionlabs.blubot.bl
 
 import android.bluetooth.BluetoothClass
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothDevice.BOND_BONDED
+import android.bluetooth.BluetoothDevice.*
 
 data class Device(
     val name: String,
     val ssid: String,
     val bluetoothDevice: BluetoothDevice,
-    val connected: Boolean = false
+    val connectionState: ConnectionState
 ) {
 
     val deviceTypeIconRes: Int = when (bluetoothDevice.bluetoothClass.majorDeviceClass) {
@@ -50,10 +50,42 @@ data class Device(
         else -> R.drawable.device_class_unknown_device
     }
 
-    val isPaired: Boolean = bluetoothDevice.bondState == BOND_BONDED
+    val pairingState: PairingState = when (bluetoothDevice.bondState) {
+        BOND_NONE -> PairingState.NONE
+        BOND_BONDING -> PairingState.PAIRING
+        BOND_BONDED -> PairingState.PAIRED
+        else -> PairingState.NONE
+    }
 
     companion object {
         const val PERIPHERAL_KEYBOARD = 0x0540
         const val PERIPHERAL_KEYBOARD_POINTING = 0x05C0
+    }
+
+    /**
+     * We need to override this method, so that [pairingState] is included in comparison.
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Device) return false
+
+        if (name != other.name) return false
+        if (ssid != other.ssid) return false
+        if (bluetoothDevice != other.bluetoothDevice) return false
+        if (connectionState != other.connectionState) return false
+        if (deviceTypeIconRes != other.deviceTypeIconRes) return false
+        if (pairingState != other.pairingState) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + ssid.hashCode()
+        result = 31 * result + bluetoothDevice.hashCode()
+        result = 31 * result + connectionState.hashCode()
+        result = 31 * result + deviceTypeIconRes
+        result = 31 * result + pairingState.hashCode()
+        return result
     }
 }
