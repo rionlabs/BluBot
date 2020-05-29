@@ -2,25 +2,16 @@ package org.rionlabs.blubot.bl
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
 
 class DeviceConnection(val device: BluetoothDevice) {
 
-    private var _state: ConnectionState
-
     private var bluetoothSocket: BluetoothSocket? = null
-
-    /**
-     * Defines connection state of [DeviceConnection]
-     */
-    val connectionState: ConnectionState
-        get() = _state
-
-    init {
-        _state = ConnectionState.NONE
-    }
 
     fun sendSignal(signal: String): Boolean {
         return bluetoothSocket?.let {
@@ -29,37 +20,30 @@ class DeviceConnection(val device: BluetoothDevice) {
                     write(signal.toByteArray())
                     flush()
                 }
+                Timber.d("sendSignal: Signal sent")
                 true
             }.getOrElse {
-                Timber.e(it, "Failed to write signal")
+                Timber.d("sendSignal: Failed to write signal")
                 false
             }
         } ?: false
     }
 
-    fun connect(): Boolean {
-        // Change ConnectionState
-        _state = ConnectionState.CONNECTING
-
+    suspend fun connect(): Boolean = withContext(Dispatchers.IO) {
         // Delay is added to waiting discovery to finish
-        runCatching { Thread.sleep(DELAY) }
-
-        bluetoothSocket = runCatching {
-            // Get a BluetoothSocket to connect with the given BluetoothDevice.
-            device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
-        }.onFailure {
-            Timber.e(it, "Socket's create() method failed")
-            _state = ConnectionState.ERROR
-            return false
-        }.getOrNull()
+        delay(DELAY)
 
         try {
+            bluetoothSocket =
+                device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
+                    .also {
+                        connect()
+                    }
             // Connect to the remote device through the socket.
-            bluetoothSocket?.connect()
             Timber.d("run: Socket connected ${if (bluetoothSocket?.isConnected == true) "true" else "false"}")
             // Socket opened, change ConnectionState
-            _state = ConnectionState.CONNECTED
-            return true
+
+            return@withContext true
 
         } catch (connectException: IOException) {
             // Unable to connect; close the socket and return.
@@ -70,23 +54,21 @@ class DeviceConnection(val device: BluetoothDevice) {
                 Timber.e(closeException, "Could not close the client socket")
             }
             // Error, change ConnectionState
-            _state = ConnectionState.ERROR
-            return false
+
+            return@withContext false
         }
     }
 
     /**
      * Closes this connection.
      */
-    fun close() {
-        _state = ConnectionState.CONNECTING
+    suspend fun close() = withContext(Dispatchers.IO) {
         runCatching {
-
             bluetoothSocket?.close()
         }.onFailure {
             Timber.e(it, "Error while closing connection to ${bluetoothSocket?.remoteDevice?.name}")
         }
-        _state = ConnectionState.NONE
+        return@withContext
     }
 
     companion object {

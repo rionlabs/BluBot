@@ -6,12 +6,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.rionlabs.blubot.bl.callback.CallbackManager
 import timber.log.Timber
 
 class BluetoothManager(private val appContext: Context) : CallbackManager() {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
+
+    private var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
     /**
      * Stores connections to the devices.
@@ -210,14 +215,29 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
             }
             // Already bonded, so start connection
             val connection = DeviceConnection(bluetoothDevice)
-            val connect = connection.connect()
-            if (connect) {
-                Timber.d("startConnectionTo: connection successful")
-                for (connectionCallback in deviceConnectionCallbackList) {
-                    connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem())
+            for (connectionCallback in deviceConnectionCallbackList) {
+                connectionCallback.onConnectionStateChanged(
+                    bluetoothDevice.dataItem().copy(connectionState = ConnectionState.CONNECTING)
+                )
+            }
+            coroutineScope.launch {
+                val connect = connection.connect()
+                if (connect) {
+                    Timber.d("startConnectionTo: connection successful")
+                    for (connectionCallback in deviceConnectionCallbackList) {
+                        connectionCallback.onConnectionStateChanged(
+                            bluetoothDevice.dataItem()
+                                .copy(connectionState = ConnectionState.CONNECTED)
+                        )
+                    }
+                } else {
+                    Timber.w("startConnectionTo: connection failure")
+                    for (connectionCallback in deviceConnectionCallbackList) {
+                        connectionCallback.onConnectionStateChanged(
+                            bluetoothDevice.dataItem().copy(connectionState = ConnectionState.ERROR)
+                        )
+                    }
                 }
-            } else {
-                Timber.w("startConnectionTo: connection failure")
             }
         }
     }
@@ -231,11 +251,13 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
     }
 
     fun closeConnection(device: BluetoothDevice) {
-        connectionMap[device]?.close()
-        for (connectionCallback in deviceConnectionCallbackList) {
-            connectionCallback.onConnectionStateChanged(
-                device.dataItem()
-            )
+        coroutineScope.launch {
+            connectionMap[device]?.close()
+            for (connectionCallback in deviceConnectionCallbackList) {
+                connectionCallback.onConnectionStateChanged(
+                    device.dataItem()
+                )
+            }
         }
     }
 
