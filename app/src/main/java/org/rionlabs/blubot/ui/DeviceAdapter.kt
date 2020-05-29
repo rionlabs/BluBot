@@ -13,6 +13,10 @@ import org.rionlabs.blubot.databinding.ItemDeviceBinding as ItemBinding
 class DeviceAdapter(private val interactionListener: InteractionListener) :
     ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DIFF_CALLBACK) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return DeviceViewHolder(ItemBinding.inflate(layoutInflater, parent, false))
@@ -25,11 +29,15 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
     }
 
     override fun submitList(list: MutableList<Device>?) {
-        super.submitList(list?.distinct())
+        super.submitList(list?.sortDistinct())
     }
 
     override fun submitList(list: MutableList<Device>?, commitCallback: Runnable?) {
-        super.submitList(list?.distinct(), commitCallback)
+        super.submitList(list?.sortDistinct(), commitCallback)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).ssid.hashCode().toLong()
     }
 
     class DeviceViewHolder(private val binding: ItemBinding) :
@@ -47,6 +55,10 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
         fun onClick(block: (() -> Unit)) {
             binding.root.setOnClickListener { block() }
         }
+    }
+
+    private fun MutableList<Device>.sortDistinct(): MutableList<Device> {
+        return distinct().sortedBy { device -> device.ssid }.toMutableList()
     }
 
     companion object {
