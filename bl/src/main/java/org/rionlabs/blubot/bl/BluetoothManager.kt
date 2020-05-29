@@ -13,6 +13,9 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
+    /**
+     * Stores connections to the devices.
+     */
     private val connectionMap = mutableMapOf<BluetoothDevice, DeviceConnection>()
 
     /**
@@ -59,6 +62,11 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
                         BluetoothAdapter.ERROR
                     )
 
+                if (currentState == previousState) {
+                    // No change in the state
+                    return
+                }
+
                 for (callback in bluetoothStateCallbackList) {
                     callback.onBluetoothStateChanged(
                         BluetoothState.fromIntReference(currentState),
@@ -78,11 +86,11 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
             when (action) {
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                     isInDiscovery = true
-                    Timber.d("STATE_DISCOVERY_IN_PROGRESS")
+                    Timber.d("BluetoothDiscovery state changed to: ACTION_DISCOVERY_STARTED")
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                     isInDiscovery = false
-                    Timber.d("STATE_DISCOVERY_FINISHED")
+                    Timber.d("BluetoothDiscovery state changed to: STATE_DISCOVERY_FINISHED")
                 }
                 else -> {
                     Timber.w("Action : $action is not bluetooth related.")
@@ -127,6 +135,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
             val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
             val bondState =
                 intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.BOND_NONE)
+            Timber.d("onReceive: BondState changed for device with SSID(${device?.address}) to ${bondState.bondStateString()}")
 
             if (device != null) {
                 when (bondState) {
@@ -185,21 +194,30 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         // Cancel discovery to make connection faster
         bluetoothAdapter?.cancelDiscovery()
 
+        Timber.d("startConnectionTo: ${bluetoothDevice.address}, with current bond state ${bluetoothDevice.bondState.bondStateString()}")
+
         if (bluetoothDevice.bondState == BluetoothDevice.BOND_NONE) {
+            Timber.d("startConnectionTo: Device not bonded. Creating bond.")
             selectedDevice = bluetoothDevice
             bluetoothDevice.createBond()
             for (deviceBondCallback in deviceBondCallbackList) {
                 deviceBondCallback.onBondStarted(bluetoothDevice.dataItem())
             }
         } else if (bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED) {
+            Timber.d("startConnectionTo: Device already bonded. Starting connection.")
             for (deviceBondCallback in deviceBondCallbackList) {
                 deviceBondCallback.onBonded(bluetoothDevice.dataItem())
             }
-            // If already bonded, then start connection
+            // Already bonded, so start connection
             val connection = DeviceConnection(bluetoothDevice)
-            connection.connect()
-            for (connectionCallback in deviceConnectionCallbackList) {
-                connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem(connected = true))
+            val connect = connection.connect()
+            if (connect) {
+                Timber.d("startConnectionTo: connection successful")
+                for (connectionCallback in deviceConnectionCallbackList) {
+                    connectionCallback.onConnectionStateChanged(bluetoothDevice.dataItem(connected = true))
+                }
+            } else {
+                Timber.w("startConnectionTo: connection failure")
             }
         }
     }
