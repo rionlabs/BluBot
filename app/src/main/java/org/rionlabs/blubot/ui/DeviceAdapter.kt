@@ -37,7 +37,9 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).ssid.hashCode().toLong()
+        return with(getItem(position)) {
+            (ssid + name).hashCode().toLong()
+        }
     }
 
     class DeviceViewHolder(private val binding: ItemBinding) :
