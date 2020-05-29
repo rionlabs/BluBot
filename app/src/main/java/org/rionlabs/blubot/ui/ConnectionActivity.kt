@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.view.View.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.BluetoothState
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
@@ -17,13 +16,11 @@ class ConnectionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConnectionBinding
     private lateinit var viewModel: ConnectionViewModel
-    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_connection)
         viewModel = ViewModelProviders.of(this).get(ConnectionViewModel::class.java)
-        navController = findNavController(R.id.connection_navigation_host)
 
         binding.apply {
             aboutButton.setOnClickListener { }
@@ -37,14 +34,18 @@ class ConnectionActivity : AppCompatActivity() {
         viewModel.bluetoothStateData.observe(this, Observer {
             when (it ?: return@Observer) {
                 BluetoothState.OFF -> {
-                    navController.navigate(R.id.enableBluetooth)
+                    supportFragmentManager.commit {
+                        replace(R.id.fragmentContainer, BLDisabledFragment())
+                    }
                     binding.refreshButton.visibility = INVISIBLE
                 }
                 BluetoothState.TURNING_ON -> {
                     Timber.d("State changing to ON")
                 }
                 BluetoothState.ON -> {
-                    navController.popBackStack()
+                    supportFragmentManager.commit {
+                        replace(R.id.fragmentContainer, BLDiscoveryFragment())
+                    }
                     binding.refreshButton.visibility = VISIBLE
                 }
                 BluetoothState.TURNING_OFF -> {

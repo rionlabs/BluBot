@@ -76,19 +76,11 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <fragment
-                android:id="@+id/connection_navigation_host"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/connection_navigation" />
-        </FrameLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <org.rionlabs.blubot.ui.view.ControlSheet
             android:id="@+id/controlSheet"
