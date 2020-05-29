@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.BluetoothState
 import org.rionlabs.blubot.databinding.ActivityConnectionBinding
@@ -20,7 +20,7 @@ class ConnectionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_connection)
-        viewModel = ViewModelProviders.of(this).get(ConnectionViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ConnectionViewModel::class.java)
 
         binding.apply {
             aboutButton.setOnClickListener { }

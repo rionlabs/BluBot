@@ -12,7 +12,7 @@ class ControlBoard @JvmOverloads constructor(
 
     private var onClickListener: OnClickListener? = null
 
-    val binding: ControlBoardBinding =
+    private val binding: ControlBoardBinding =
         ControlBoardBinding.inflate(LayoutInflater.from(context), this, false)
 
     init {
