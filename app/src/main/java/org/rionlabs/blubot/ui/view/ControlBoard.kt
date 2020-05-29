@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.rionlabs.blubot.databinding.ControlBoardBinding
 
+/**
+ * View representing control board.
+ * Just a view controlled by [ControlSheet].
+ */
 class ControlBoard @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
