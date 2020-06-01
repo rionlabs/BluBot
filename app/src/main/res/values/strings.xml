@@ -40,4 +40,7 @@
 
     <string name="scan">Scan</string>
     <string name="stop">Stop</string>
+
+    <string name="scanning_in_progress">Scanning for devices…</string>
+    <string name="scanning_stopped">Available Devices</string>
 </resources>

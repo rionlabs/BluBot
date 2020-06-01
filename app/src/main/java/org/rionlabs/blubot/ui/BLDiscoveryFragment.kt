@@ -136,6 +136,7 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
 
     override fun onDiscoveryStateChanged(isDiscovering: Boolean) {
         inDiscovery = isDiscovering
+        deviceAdapter.updateScanningMode(isDiscovering)
     }
 
     private fun discoverDevices() {
