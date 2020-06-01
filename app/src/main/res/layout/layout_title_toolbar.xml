@@ -6,15 +6,33 @@
     app:contentInsetEnd="0dp"
     app:contentInsetStart="0dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_normal"
-        android:layout_marginBottom="@dimen/space_normal"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@color/primaryLightTextColor"
-        android:textSize="@dimen/text_header"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_large"
+            android:layout_marginTop="@dimen/space_normal"
+            android:layout_marginBottom="@dimen/space_normal"
+            android:layout_weight="1"
+            android:text="@string/app_name"
+            android:textColor="@color/primaryLightTextColor"
+            android:textSize="@dimen/text_header"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/settingsButton"
+            style="?borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/action_settings"
+            android:src="@drawable/ic_action_settings"
+            android:tint="@color/iconsLight" />
+
+    </LinearLayout>
 
 </androidx.appcompat.widget.Toolbar>

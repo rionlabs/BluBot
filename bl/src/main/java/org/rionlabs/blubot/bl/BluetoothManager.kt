@@ -276,6 +276,13 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
     }
 
     /**
+     * Needs [android.Manifest.permission.BLUETOOTH_ADMIN] permission
+     */
+    fun stopDiscovery(): Boolean {
+        return bluetoothAdapter?.cancelDiscovery() ?: false
+    }
+
+    /**
      * Unregisters the receivers. No callback will work after this method called.
      */
     fun unregisterReceivers() {

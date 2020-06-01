@@ -37,4 +37,7 @@
     <string name="connected_to">Connected to %1$s</string>
 
     <string name="empty" translatable="false" />
+
+    <string name="scan">Scan</string>
+    <string name="stop">Stop</string>
 </resources>

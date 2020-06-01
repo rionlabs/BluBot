@@ -1,7 +1,6 @@
 package org.rionlabs.blubot.ui
 
 import android.os.Bundle
-import android.view.View.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.commit
@@ -23,9 +22,18 @@ class ConnectionActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(ConnectionViewModel::class.java)
 
         binding.apply {
-            aboutButton.setOnClickListener { }
-            refreshButton.setOnClickListener { viewModel.refreshDevices() }
-            settingsButton.setOnClickListener { }
+            scanButton.setOnClickListener {
+                if (scanButton.text == getString(R.string.scan)) {
+                    // Scan is stopped
+                    viewModel.refreshDevices()
+                } else {
+                    // Scanning in progress
+                    viewModel.stopDiscovery()
+                }
+            }
+            settingsButton.setOnClickListener {
+
+            }
         }
     }
 
@@ -37,7 +45,7 @@ class ConnectionActivity : AppCompatActivity() {
                     supportFragmentManager.commit {
                         replace(R.id.fragmentContainer, BLDisabledFragment())
                     }
-                    binding.refreshButton.visibility = INVISIBLE
+                    binding.scanButton.hide()
                 }
                 BluetoothState.TURNING_ON -> {
                     Timber.d("State changing to ON")
@@ -46,7 +54,7 @@ class ConnectionActivity : AppCompatActivity() {
                     supportFragmentManager.commit {
                         replace(R.id.fragmentContainer, BLDiscoveryFragment())
                     }
-                    binding.refreshButton.visibility = VISIBLE
+                    binding.scanButton.show()
                 }
                 BluetoothState.TURNING_OFF -> {
                     Timber.d("State changing to OFF")
@@ -62,11 +70,11 @@ class ConnectionActivity : AppCompatActivity() {
     private fun toggleRefreshMenu(isDiscovering: Boolean) {
         binding.apply {
             if (isDiscovering) {
-                refreshButton.visibility = GONE
-                refreshProgressBar.visibility = VISIBLE
+                scanButton.setIconResource(R.drawable.ic_action_stop)
+                scanButton.setText(R.string.stop)
             } else {
-                refreshButton.visibility = VISIBLE
-                refreshProgressBar.visibility = GONE
+                scanButton.setIconResource(R.drawable.ic_action_refresh)
+                scanButton.setText(R.string.scan)
             }
         }
     }

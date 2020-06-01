@@ -101,6 +101,10 @@ class ConnectionViewModel(app: Application) : AndroidViewModel(app), BluetoothSt
         return bluetoothManager.startDiscovery()
     }
 
+    fun stopDiscovery(): Boolean {
+        return bluetoothManager.stopDiscovery()
+    }
+
     override fun onCleared() {
         bluetoothManager.let {
             // Clear callbacks
