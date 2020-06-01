@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.rionlabs.blubot.BuildConfig
 import org.rionlabs.blubot.R
 import org.rionlabs.blubot.bl.callback.DiscoveryStateCallback
 import org.rionlabs.blubot.databinding.FragmentBlDiscoveryBinding
@@ -146,7 +147,7 @@ class BLDiscoveryFragment : Fragment(), DeviceAdapter.InteractionListener,
 
         // Start discovery
         val discoveryStarted = bluetoothManager?.startDiscovery() ?: false
-        if (!discoveryStarted)
+        if (!discoveryStarted && BuildConfig.DEBUG)
             Toast.makeText(activity, "Bluetooth discovery failed.", Toast.LENGTH_LONG).show()
         else
             Toast.makeText(activity, "Discovery started", Toast.LENGTH_SHORT).show()
