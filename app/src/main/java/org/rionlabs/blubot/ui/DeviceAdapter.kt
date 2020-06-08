@@ -107,7 +107,7 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
     }
 
     private fun MutableList<Device>.sortDistinct(): MutableList<Device> {
-        return distinct().sortedBy { device -> device.ssid }.toMutableList()
+        return distinct().sortedWith(SORTER).toMutableList()
     }
 
     companion object {
@@ -122,6 +122,12 @@ class DeviceAdapter(private val interactionListener: InteractionListener) :
             override fun areContentsTheSame(old: Device, new: Device): Boolean {
                 return old == new
             }
+        }
+
+        private val SORTER = Comparator<Device> { first, second ->
+            val firstName = if (first.name.isEmpty()) "z" else first.name
+            val secondName = if (second.name.isEmpty()) "z" else second.name
+            (firstName + first.ssid).compareTo(secondName + second.ssid)
         }
     }
 
