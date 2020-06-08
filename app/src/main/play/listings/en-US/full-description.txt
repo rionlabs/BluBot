@@ -1,0 +1,12 @@
+BluBot makes it easy for DIY developers to use their Android Device as a remote control for the development boards. BluBot will handle all Android-based code for your project. Just download it, connect to your device and start sending signals!
+
+• Available on GitHub
+BluBot is open sourced and available under MIT license. So feel free to download the project, customize and build it as you wish!
+https://github.com/rionlabs/BluBot
+
+• Issues
+If you have any problems or questions with BluBot, feel free to raise an issue on GitHub or drop a message at mail@rionlabs.org
+
+• Dev to Dev
+The app does not contain irritating ads or any distractions and never will.
+Also, you can contribute to BluBot by finding issues, creating useful PRs and adding localizations.

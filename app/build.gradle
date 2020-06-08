@@ -5,6 +5,8 @@ apply plugin: 'kotlin-kapt'
 
 apply from: 'signing.gradle'
 
+apply plugin: 'com.github.triplet.play'
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -36,6 +38,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+play {
+    serviceAccountCredentials = file("service-account.json")
+    track = "beta"
 }
 
 dependencies {
