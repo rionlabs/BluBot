@@ -6,6 +6,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">@dimen/space_normal</item>
+        <item name="tint">@color/iconsLight</item>
         <item name="fabCustomSize">@dimen/control_board_button_size</item>
     </style>
 

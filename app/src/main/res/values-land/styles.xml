@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ControlBoard.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/space_small</item>
+        <item name="tint">@color/iconsLight</item>
+        <item name="fabCustomSize">64dp</item>
+    </style>
+</resources>
