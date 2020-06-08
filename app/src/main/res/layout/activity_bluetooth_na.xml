@@ -24,89 +24,100 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_large"
                     android:layout_marginTop="@dimen/space_normal"
+                    android:layout_marginEnd="@dimen/space_large"
                     android:layout_marginBottom="@dimen/space_normal"
                     android:gravity="center"
                     android:text="@string/app_name"
                     android:textColor="@color/primaryLightTextColor"
+                    android:textFontWeight="800"
                     android:textSize="@dimen/text_header"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="UnusedAttribute" />
 
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/space_normal"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageView
-                android:id="@+id/blNaImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/space_normal"
-                android:contentDescription="@string/bluetooth_not_available"
-                android:src="@drawable/ic_bluetooth_disabled"
-                android:tint="@color/primaryDarkColor"
-                app:layout_constraintBottom_toTopOf="@+id/blNaTitleText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/space_normal">
 
-            <TextView
-                android:id="@+id/blNaTitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/space_normal"
-                android:text="@string/bluetooth_not_available"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                app:layout_constraintBottom_toTopOf="@+id/blNaDescriptionText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blNaImage" />
+                <ImageView
+                    android:id="@+id/blNaImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_normal"
+                    android:contentDescription="@string/bluetooth_not_available"
+                    android:src="@drawable/ic_bluetooth_disabled"
+                    android:tint="@color/primaryDarkColor"
+                    app:layout_constraintBottom_toTopOf="@+id/blNaTitleText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.2"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
-            <TextView
-                android:id="@+id/blNaDescriptionText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/space_normal"
-                android:gravity="center"
-                android:text="@string/bluetooth_na_description"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                app:layout_constraintBottom_toTopOf="@+id/blNaGithubIssueButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blNaTitleText" />
+                <TextView
+                    android:id="@+id/blNaTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_normal"
+                    android:text="@string/bluetooth_not_available"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    app:layout_constraintBottom_toTopOf="@+id/blNaDescriptionText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/blNaImage" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/blNaGithubIssueButton"
-                style="@style/ButtonStyle.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_normal"
-                android:text="@string/GitHub"
-                app:icon="@drawable/ic_web"
-                app:layout_constraintBottom_toTopOf="@+id/blNaDevEmailButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blNaDescriptionText" />
+                <TextView
+                    android:id="@+id/blNaDescriptionText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/space_normal"
+                    android:gravity="center"
+                    android:text="@string/bluetooth_na_description"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    app:layout_constraintBottom_toTopOf="@+id/blNaGithubIssueButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/blNaTitleText" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/blNaDevEmailButton"
-                style="@style/ButtonStyle.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_small"
-                android:text="@string/email_developer"
-                app:icon="@drawable/ic_email"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/blNaGithubIssueButton" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/blNaGithubIssueButton"
+                    style="@style/ButtonStyle.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_normal"
+                    android:text="@string/GitHub"
+                    app:icon="@drawable/ic_web"
+                    app:layout_constraintBottom_toTopOf="@+id/blNaDevEmailButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/blNaDescriptionText" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/blNaDevEmailButton"
+                    style="@style/ButtonStyle.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_small"
+                    android:text="@string/email_developer"
+                    app:icon="@drawable/ic_email"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/blNaGithubIssueButton" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
