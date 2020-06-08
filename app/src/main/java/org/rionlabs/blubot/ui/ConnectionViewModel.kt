@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import org.rionlabs.blubot.bl.BluetoothState
 import org.rionlabs.blubot.bl.Device
 import org.rionlabs.blubot.bl.callback.*
@@ -17,9 +18,9 @@ class ConnectionViewModel(app: Application) : AndroidViewModel(app), BluetoothSt
     val bluetoothStateData: LiveData<BluetoothState>
         get() = _bluetoothState
 
-    private val _deviceList = MutableLiveData<List<Device>>()
+    private val _deviceMap = MutableLiveData<MutableMap<String, Device>>()
     val deviceListData: LiveData<List<Device>>
-        get() = _deviceList
+        get() = _deviceMap.map { it?.values?.toList() ?: emptyList() }
 
     private val _isDiscovering = MutableLiveData<Boolean>()
     val isDiscoveringData: LiveData<Boolean>
@@ -54,47 +55,27 @@ class ConnectionViewModel(app: Application) : AndroidViewModel(app), BluetoothSt
 
     override fun onDiscoveryStateChanged(isDiscovering: Boolean) {
         if (isDiscovering) {
-            _deviceList.postValue(mutableListOf())
+            _deviceMap.postValue(mutableMapOf())
         }
         _isDiscovering.postValue(isDiscovering)
     }
 
-    override fun onDeviceDiscovered(device: Device) {
-        val deviceList = _deviceList.value?.toMutableList() ?: mutableListOf()
-        deviceList.add(device)
-        _deviceList.postValue(deviceList)
-    }
+    override fun onDeviceDiscovered(device: Device) = updateMap(device)
 
-    override fun onBondStarted(device: Device) {
-        val deviceList = _deviceList.value?.toMutableList() ?: mutableListOf()
-        replaceDevice(deviceList, device)
-        _deviceList.postValue(deviceList)
-    }
+    override fun onBondStarted(device: Device) = updateMap(device)
 
-    override fun onBonded(device: Device) {
-        val deviceList = _deviceList.value?.toMutableList() ?: mutableListOf()
-        replaceDevice(deviceList, device)
-        _deviceList.postValue(deviceList)
-    }
+    override fun onBonded(device: Device) = updateMap(device)
 
-    override fun onBondEnded(device: Device) {
-        val deviceList = _deviceList.value?.toMutableList() ?: mutableListOf()
-        replaceDevice(deviceList, device)
-        _deviceList.postValue(deviceList)
-    }
+    override fun onBondEnded(device: Device) = updateMap(device)
 
-    override fun onConnectionStateChanged(device: Device) {
-        val deviceList = _deviceList.value?.toMutableList() ?: mutableListOf()
-        replaceDevice(deviceList, device)
-        _deviceList.postValue(deviceList)
-    }
+    override fun onConnectionStateChanged(device: Device) = updateMap(device)
 
     // endregion
 
-    private fun replaceDevice(deviceList: MutableList<Device>, newDevice: Device) {
-        val oldDevice = deviceList.find { it.ssid == newDevice.ssid }
-        oldDevice?.let { deviceList.remove(it) }
-        deviceList.add(newDevice)
+    private fun updateMap(newDevice: Device) {
+        val deviceList = _deviceMap.value ?: mutableMapOf()
+        deviceList[newDevice.ssid] = newDevice
+        _deviceMap.postValue(deviceList)
     }
 
     fun refreshDevices(): Boolean {
