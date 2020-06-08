@@ -13,7 +13,14 @@ class DeviceConnection(val device: BluetoothDevice) {
 
     private var bluetoothSocket: BluetoothSocket? = null
 
+    val isConnected: Boolean = bluetoothSocket?.isConnected ?: false
+
     fun sendSignal(signal: String): Boolean {
+        if (!isConnected) {
+            Timber.w("sendSignal: device not connected yet.")
+            return false
+        }
+
         return bluetoothSocket?.let {
             runCatching {
                 it.outputStream.apply {
@@ -37,10 +44,10 @@ class DeviceConnection(val device: BluetoothDevice) {
             bluetoothSocket =
                 device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(SERVER_UUID))
                     .also {
-                        connect()
+                        it.connect()
                     }
             // Connect to the remote device through the socket.
-            Timber.d("run: Socket connected ${if (bluetoothSocket?.isConnected == true) "true" else "false"}")
+            Timber.d("run: Socket connected ${(bluetoothSocket?.isConnected ?: false)}")
             // Socket opened, change ConnectionState
 
             return@withContext true

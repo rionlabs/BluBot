@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import org.rionlabs.blubot.R
+import org.rionlabs.blubot.bl.ConnectionState.*
 import org.rionlabs.blubot.bl.Device
 import org.rionlabs.blubot.bl.callback.DeviceConnectionCallback
 import org.rionlabs.blubot.databinding.ViewControlSheetBinding
@@ -98,38 +99,6 @@ class ControlSheet @JvmOverloads constructor(
         }
     }
 
-//    override fun onBondStarted(device: Device) {
-//        binding.navigationButton.visibility = View.GONE
-//        binding.navigationProgressBar.visibility = View.VISIBLE
-//        binding.toolbarTitle.text = context.getString(R.string.connecting_to, device.name)
-//        bluetoothManager.selectedDevice?.apply {
-//            bottomSheetBehavior.peekHeight = collapsedHeight
-//        }
-//    }
-//
-//    override fun onBonded(device: Device) {
-//        binding.navigationProgressBar.visibility = View.GONE
-//        binding.navigationButton.visibility = View.VISIBLE
-//        binding.closeButton.visibility = View.VISIBLE
-//        binding.toolbarTitle.text = context.getString(R.string.connected_to, device.name)
-//        bluetoothManager.selectedDevice?.apply {
-//            bottomSheetBehavior.peekHeight = collapsedHeight
-//        }
-//        // Expand for remote control
-//    }
-//
-//    override fun onBondEnded(device: Device) {
-//        binding.apply {
-//            navigationProgressBar.visibility = GONE
-//            navigationButton.visibility = GONE
-//            closeButton.visibility = GONE
-//            binding.toolbarTitle.text = context.getString(R.string.empty)
-//        }
-//        bluetoothManager.selectedDevice?.apply {
-//            bottomSheetBehavior.peekHeight = 0
-//        }
-//    }
-
     private fun changeState() {
         if (bottomSheetBehavior.state == STATE_EXPANDED) {
             bottomSheetBehavior.state = STATE_COLLAPSED
@@ -144,11 +113,36 @@ class ControlSheet @JvmOverloads constructor(
     }
 
     override fun onConnectionStateChanged(device: Device) {
-        binding.navigationButton.visibility = View.GONE
-        binding.navigationProgressBar.visibility = View.VISIBLE
-        binding.toolbarTitle.text = context.getString(R.string.connecting_to, device.name)
-        bluetoothManager.selectedDevice?.apply {
-            bottomSheetBehavior.peekHeight = collapsedHeight
+        when (device.connectionState) {
+            CONNECTED -> {
+                binding.navigationProgressBar.visibility = View.GONE
+                binding.navigationButton.visibility = View.VISIBLE
+                binding.closeButton.visibility = View.VISIBLE
+                binding.toolbarTitle.text = context.getString(R.string.connected_to, device.name)
+                bluetoothManager.selectedDevice?.apply {
+                    bottomSheetBehavior.peekHeight = collapsedHeight
+                }
+                // Expand for remote control
+            }
+            CONNECTING -> {
+                binding.navigationButton.visibility = View.GONE
+                binding.navigationProgressBar.visibility = View.VISIBLE
+                binding.toolbarTitle.text = context.getString(R.string.connecting_to, device.name)
+                bluetoothManager.selectedDevice?.apply {
+                    bottomSheetBehavior.peekHeight = collapsedHeight
+                }
+            }
+            NONE, ERROR -> {
+                binding.apply {
+                    navigationProgressBar.visibility = GONE
+                    navigationButton.visibility = GONE
+                    closeButton.visibility = GONE
+                    binding.toolbarTitle.text = context.getString(R.string.empty)
+                }
+                bluetoothManager.selectedDevice?.apply {
+                    bottomSheetBehavior.peekHeight = 0
+                }
+            }
         }
     }
 }

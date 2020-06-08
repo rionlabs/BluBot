@@ -199,6 +199,18 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
         // Cancel discovery to make connection faster
         bluetoothAdapter?.cancelDiscovery()
 
+        if (connectionMap[bluetoothDevice]?.isConnected == true) {
+            // Already connected. This should not happen
+            selectedDevice = bluetoothDevice
+            for (connectionCallback in deviceConnectionCallbackList) {
+                connectionCallback.onConnectionStateChanged(
+                    bluetoothDevice.dataItem()
+                        .copy(connectionState = ConnectionState.CONNECTED)
+                )
+            }
+            return
+        }
+
         Timber.d("startConnectionTo: ${bluetoothDevice.address}, with current bond state ${bluetoothDevice.bondState.bondStateString()}")
 
         if (bluetoothDevice.bondState == BluetoothDevice.BOND_NONE) {
@@ -224,6 +236,7 @@ class BluetoothManager(private val appContext: Context) : CallbackManager() {
                 val connect = connection.connect()
                 if (connect) {
                     Timber.d("startConnectionTo: connection successful")
+                    selectedDevice = bluetoothDevice
                     for (connectionCallback in deviceConnectionCallbackList) {
                         connectionCallback.onConnectionStateChanged(
                             bluetoothDevice.dataItem()
